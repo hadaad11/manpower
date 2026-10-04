@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -54,7 +54,7 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; color: v
 /* TABLE */
 .tbl-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-thead th { background: var(--navy); color: var(--white); padding: 10px 8px; text-align: left; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; position: sticky; top: 57px; z-index: 5; white-space: nowrap; }
+thead th { background: var(--navy); color: var(--white); padding: 10px 8px; text-align: left; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;  white-space: nowrap; }
 thead th:first-child { width: 40px; text-align: center; }
 thead th:nth-child(2) { width: 58px; text-align: center; }
 tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
@@ -108,7 +108,7 @@ td:first-child, td:nth-child(2) { text-align: center; color: var(--muted); font-
 @media (max-width: 480px) {
   table { font-size: 12px; }
   td { padding: 7px 5px; }
-  .title-cell { display: none; }
+  .title-cell, #sec-all thead th:nth-child(4) { display: none; }
   .header-top h2 { font-size: 17px; }
 }
 </style>
@@ -197,20 +197,20 @@ const DEPT_CLS = {
   'production/stationary pump':'d-st-pump',
   'production /precast':'d-prod'
 };
-function deptCls(d){ return DEPT_CLS[(d||'').toLowerCase().trim()] || 'd-adm'; }
-function deptLabel(d){ return (d||'').replace('Production/Stationary pump','Stat. Pump').replace('Production /Precast','Precast').replace('QC /Laboratory','QC / Lab').replace('Economic safety','Eco Safety'); }
+function deptCls(d){ const k=(d||'').toLowerCase().replace(/\s*\/\s*/g,'/').trim(); return DEPT_CLS[k] || (k.includes('stationary')?'d-st-pump':k.startsWith('maint')?'d-maint':k.startsWith('stock')?'d-stock':'d-adm'); }
+function deptLabel(d){ return (d||'').replace('Production / stationary pump','Stat. Pump').replace('Production / precast','Precast').replace('Maintaince / stationary pump','Maint. / Stat. Pump').replace('Stock / stationary pump','Stock / Stat. Pump').replace('QC / laboratory','QC / Lab').replace('Maintaince','Maintenance').replace('Economic safety','Eco Safety'); }
 
 // ── STATS ─────────────────────────────────────────────────────
 function buildStats(){
   const fl = DATA.fl||[];
   const depts = {};
   fl.forEach(r=>{ const k=(r.d||'').trim(); depts[k]=(depts[k]||0)+1; });
-  const prod = (depts['Production']||0)+(depts['Production/Stationary pump']||0)+(depts['Production /Precast']||0);
+  const prod = (depts['Production']||0)+(depts['Production / stationary pump']||0)+(depts['Production / precast']||0);
   const stats=[
     {v:fl.length,l:'Total Staff'},
     {v:prod,l:'Production'},
-    {v:depts['QC /Laboratory']||0,l:'QC / Lab'},
-    {v:depts['Maintaince']||0,l:'Maintenance'},
+    {v:depts['QC / laboratory']||0,l:'QC / Lab'},
+    {v:(depts['Maintaince']||0)+(depts['Maintaince / stationary pump']||0),l:'Maintenance'},
     {v:depts['Administration']||0,l:'Admin'},
     {v:(depts['Finance']||0),l:'Finance'}
   ];
@@ -324,6 +324,7 @@ function showTab(name, el){
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ── INIT ─────────────────────────────────────────────────────
+(DATA.fl||[]).forEach(r=>{const d=(r.d||'').trim().replace(/\s*\/\s*/g,' / ');r.d=(d.charAt(0).toUpperCase()+d.slice(1).toLowerCase()).replace(/^Qc/,'QC');});
 buildStats();
 buildDeptFilters();
 filterAll();
