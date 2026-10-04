@@ -2,335 +2,302 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NCM Manpower Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f2748">
+<title>NCM Manpower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #14325F;
-  --gold: #C09B28;
-  --white: #ffffff;
-  --light: #f4f8fd;
-  --border: #d0dce8;
-  --day: #00467F;
-  --night: #37_1E5A;
-  --green: #006437;
-  --text: #1a2a3a;
-  --muted: #6b7f96;
+:root{
+  --bg:#f3f5f9; --surface:#ffffff; --surface-2:#f7f9fc; --line:#e6eaf0;
+  --ink:#0f1b2d; --ink-2:#4b5869; --ink-3:#8a96a6;
+  --brand:#0f2748; --brand-2:#1d4a85; --gold:#c9a13b; --gold-soft:#fbf3de;
+  --day:#e8833a; --day-soft:#fdf0e5; --night:#5b4bc4; --night-soft:#eeebfb;
+  --shadow:0 1px 2px rgba(15,27,45,.04),0 4px 16px rgba(15,27,45,.06);
+  --radius:16px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; color: var(--text); }
-
-/* HEADER */
-.header { background: var(--navy); color: var(--white); padding: 0; }
-.header-top { background: var(--navy); padding: 14px 16px 6px; }
-.header-top h1 { font-size: 13px; letter-spacing: 1px; color: var(--gold); font-weight: 700; text-transform: uppercase; }
-.header-top h2 { font-size: 20px; font-weight: 800; margin: 2px 0 0; }
-.header-gold { background: var(--gold); height: 3px; }
-.stats-row { display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto; }
-.stat-card { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 14px; min-width: 90px; text-align: center; flex-shrink: 0; }
-.stat-card .val { font-size: 22px; font-weight: 800; color: var(--gold); line-height: 1; }
-.stat-card .lbl { font-size: 10px; color: rgba(255,255,255,0.8); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-/* TABS */
-.tabs { display: flex; overflow-x: auto; background: var(--navy); border-top: 1px solid rgba(255,255,255,0.15); padding: 0 8px; gap: 2px; }
-.tab { padding: 10px 14px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.65); cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; flex-shrink: 0; }
-.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-.tab:hover:not(.active) { color: rgba(255,255,255,0.9); }
-
-/* SEARCH */
-.search-bar { padding: 10px 12px; background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
-.search-bar input { width: 100%; padding: 9px 14px 9px 38px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 14px; background: var(--light) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7f96' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center; outline: none; color: var(--text); }
-.search-bar input:focus { border-color: var(--navy); background-color: var(--white); }
-
-/* SECTION */
-.section { display: none; }
-.section.active { display: block; }
-
-/* FILTER ROW */
-.filter-row { display: flex; gap: 6px; padding: 8px 12px; overflow-x: auto; background: var(--white); border-bottom: 1px solid var(--border); }
-.fchip { padding: 5px 12px; border-radius: 14px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; border: 1.5px solid var(--border); background: var(--light); color: var(--muted); transition: all 0.2s; flex-shrink: 0; }
-.fchip.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
-
-/* TABLE */
-.tbl-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-thead th { background: var(--navy); color: var(--white); padding: 10px 8px; text-align: left; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;  white-space: nowrap; }
-thead th:first-child { width: 40px; text-align: center; }
-thead th:nth-child(2) { width: 58px; text-align: center; }
-tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
-tbody tr:hover { background: #e8f0f8 !important; }
-tbody tr:nth-child(even) { background: var(--light); }
-td { padding: 9px 8px; vertical-align: middle; }
-td:first-child, td:nth-child(2) { text-align: center; color: var(--muted); font-size: 11px; }
-.code-badge { display: inline-block; background: var(--navy); color: var(--white); border-radius: 4px; padding: 2px 6px; font-size: 11px; font-weight: 700; }
-.name-cell { font-weight: 500; }
-.title-cell { color: var(--muted); font-size: 12px; }
-.dept-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-
-/* SHIFT SECTION */
-.shift-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-@media (max-width: 600px) { .shift-container { grid-template-columns: 1fr; } }
-.shift-panel { }
-.shift-hdr { padding: 10px 14px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.shift-hdr.day { background: #00467F; color: var(--white); }
-.shift-hdr.night { background: #371E5A; color: var(--white); }
-.shift-count { background: rgba(255,255,255,0.2); border-radius: 10px; padding: 1px 8px; font-size: 11px; }
-.shift-table td { padding: 8px; }
-.shift-table td.plant-tag { font-size: 10px; font-weight: 700; color: var(--navy); background: #dde8f5; border-radius: 8px; padding: 2px 7px; text-align: center; }
-
-/* SUMMARY */
-.sum-section { padding: 10px 12px; }
-.sum-dept-title { font-size: 13px; font-weight: 700; color: var(--navy); padding: 10px 0 5px; border-bottom: 2px solid var(--gold); margin-bottom: 6px; }
-.sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; border-radius: 6px; margin-bottom: 3px; font-size: 13px; }
-.sum-row:nth-child(even) { background: var(--light); }
-.sum-count { font-weight: 700; color: var(--navy); font-size: 14px; min-width: 32px; text-align: right; }
-
-/* COUNT BADGE */
-.count-tag { font-size: 11px; color: var(--muted); padding: 0 8px; }
-
-/* DEPT COLORS */
-.d-prod { background: #dce8f5; color: #003d7a; }
-.d-maint { background: #d5ede0; color: #005a2e; }
-.d-qc { background: #f5e6d0; color: #7a3500; }
-.d-adm { background: #e8d5f0; color: #5a0090; }
-.d-plan { background: #d5e8e8; color: #005a5a; }
-.d-fin { background: #fce8e8; color: #900000; }
-.d-stock { background: #e8ead5; color: #4a4a00; }
-.d-eco { background: #e0d5e8; color: #3d0060; }
-.d-proc { background: #e8f0e0; color: #2a5000; }
-.d-st-pump { background: #d5e4f0; color: #003f6e; }
-
-/* EMPTY STATE */
-.empty { text-align: center; padding: 40px; color: var(--muted); }
-.empty svg { opacity: 0.3; margin-bottom: 10px; }
-
-/* MOBILE */
-@media (max-width: 480px) {
-  table { font-size: 12px; }
-  td { padding: 7px 5px; }
-  .title-cell, #sec-all thead th:nth-child(4) { display: none; }
-  .header-top h2 { font-size: 17px; }
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b1220; --surface:#121b2c; --surface-2:#172236; --line:#223049;
+    --ink:#e8edf5; --ink-2:#a7b3c4; --ink-3:#6f7d91;
+    --gold-soft:#2a2414; --day-soft:#2b1e14; --night-soft:#1e1b36;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  }
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{overflow-x:hidden;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* hero */
+.hero{background:radial-gradient(120% 140% at 100% 0%,#24589a 0%,#0f2748 55%,#0a1c36 100%);color:#fff;padding:22px 16px 64px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;border:28px solid rgba(201,161,59,.12)}
+.wrap{max-width:1080px;margin:0 auto}
+.brand-row{display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#e2bd5a,#b88a24);display:grid;place-items:center;font-weight:800;font-size:13px;letter-spacing:.5px;color:#1a1405;box-shadow:0 4px 14px rgba(201,161,59,.35);flex-shrink:0}
+.brand-row small{display:block;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:600}
+.brand-row h1{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.hero p{margin-top:14px;color:rgba(255,255,255,.72);font-size:13px;max-width:520px}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:-44px;padding:0 16px;position:relative;z-index:2}
+@media(min-width:720px){.kpis{grid-template-columns:repeat(4,1fr);gap:14px}}
+.kpi{background:var(--surface);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between}
+.kpi .k-label{font-size:11.5px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.6px}
+.kpi .k-ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center}
+.kpi .k-ico svg{width:16px;height:16px}
+.kpi .k-val{font-size:28px;font-weight:800;letter-spacing:-.8px;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .k-sub{font-size:11.5px;color:var(--ink-3)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);padding:14px 16px 10px;margin-top:6px}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow)}
+.seg button{flex:1;padding:9px 8px;border-radius:9px;font-weight:600;font-size:13px;color:var(--ink-2);transition:all .18s}
+.seg button.on{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(15,39,72,.25)}
+@media (prefers-color-scheme: dark){.seg button.on{background:var(--brand-2)}}
+.search{position:relative;margin-top:10px}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--ink-3)}
+.search input{width:100%;padding:12px 40px 12px 40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:15px;outline:none;transition:border .15s,box-shadow .15s}
+.search input:focus{border-color:var(--brand-2);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand-2) 15%,transparent)}
+.search .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;display:none;place-items:center;color:var(--ink-3)}
+.search .clr.show{display:grid}
+
+main{padding:4px 16px 40px}
+.view{display:none}.view.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* chips */
+.chips{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.chip i{width:8px;height:8px;border-radius:50%}
+.chip b{font-weight:600;color:var(--ink-3);font-size:11.5px}
+.chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip.on b{color:inherit;opacity:.7}
+.meta{font-size:12px;color:var(--ink-3);margin:2px 2px 10px;font-weight:500}
+
+/* staff list */
+.list{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media(min-width:720px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 12px}
+.av{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:700;font-size:14px;flex-shrink:0;letter-spacing:.3px}
+.card .body{min-width:0;flex:1}
+.card .nm{font-weight:600;font-size:14px;line-height:1.3}
+.card .tt{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .dp{display:inline-flex;align-items:center;gap:5px;margin-top:4px;font-size:11px;font-weight:600;color:var(--ink-3)}
+.card .dp i{width:6px;height:6px;border-radius:50%}
+.code{flex-shrink:0;font-variant-numeric:tabular-nums;font-weight:700;font-size:12px;color:var(--brand-2);background:color-mix(in srgb,var(--brand-2) 10%,transparent);padding:5px 8px;border-radius:8px;min-width:48px;text-align:center}
+@media (prefers-color-scheme: dark){.code{color:#8fb6ee}}
+mark{background:var(--gold-soft);color:inherit;border-radius:3px;padding:0 1px}
+.more{display:block;margin:14px auto 0;padding:10px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:13px;color:var(--ink-2)}
+.empty{text-align:center;padding:48px 16px;color:var(--ink-3)}
+
+/* departments */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.panel h2{font-size:15px;font-weight:700}
+.panel .sub{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+.bar{display:block;width:100%;text-align:left;padding:9px 0;border-top:1px solid var(--line)}
+.bar:first-of-type{border-top:0}
+.bar .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px}
+.bar .row span{font-weight:600}
+.bar .row em{font-style:normal;color:var(--ink-3);font-size:12px;font-variant-numeric:tabular-nums}
+.bar .row strong{font-variant-numeric:tabular-nums}
+.track{height:8px;border-radius:99px;background:var(--surface-2);margin-top:7px;overflow:hidden}
+.track div{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.roles{margin-top:14px}
+.roles summary{cursor:pointer;font-weight:600;font-size:13px;padding:10px 0;list-style:none;display:flex;justify-content:space-between;border-top:1px solid var(--line)}
+.roles summary::-webkit-details-marker{display:none}
+.roles summary::after{content:"+";color:var(--ink-3);font-weight:500}
+.roles[open] summary::after{content:"\2013"}
+.role{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0 5px 12px;color:var(--ink-2)}
+.role b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* workers */
+.shifts{display:grid;gap:14px}
+@media(min-width:820px){.shifts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.shift{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.shift-h{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.shift-h .si{width:38px;height:38px;border-radius:11px;display:grid;place-items:center}
+.shift-h .si svg{width:20px;height:20px}
+.shift-h h3{font-size:15px;font-weight:700}
+.shift-h p{font-size:12px;color:var(--ink-3)}
+.shift-h .cnt{margin-left:auto;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.grp{padding:4px 16px 10px}
+.grp-t{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--ink-3);padding:10px 0 6px;border-top:1px solid var(--line)}
+.w{display:flex;align-items:center;gap:10px;padding:7px 0}
+.w .av{width:34px;height:34px;border-radius:10px;font-size:12px}
+.w .nm{flex:1;min-width:0;font-size:13.5px;font-weight:500;line-height:1.3}
+.w .code{min-width:44px;font-size:11.5px;padding:4px 7px}
+
+footer{text-align:center;font-size:11.5px;color:var(--ink-3);padding:8px 16px 28px}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <h1>NCM &mdash; National Concrete Manufacturing</h1>
-    <h2>Manpower Report &nbsp;|&nbsp; Operations</h2>
-  </div>
-  <div class="header-gold"></div>
-  <div class="stats-row" id="statsRow"></div>
-  <div class="tabs" id="tabsEl">
-    <div class="tab active" onclick="showTab('all',this)">All Staff</div>
-    <div class="tab" onclick="showTab('workers',this)">Workers</div>
-    <div class="tab" onclick="showTab('summary',this)">Summary</div>
-  </div>
-</div>
-
-<!-- ALL STAFF -->
-<div class="section active" id="sec-all">
-  <div class="search-bar">
-    <input type="text" id="srchAll" placeholder="Search by name, code or job title…" oninput="filterAll()">
-  </div>
-  <div class="filter-row" id="deptFilters"></div>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr>
-        <th>#</th><th>Code</th><th>Full Name</th><th>Job Title</th><th>Department</th>
-      </tr></thead>
-      <tbody id="allBody"></tbody>
-    </table>
-    <div class="empty" id="allEmpty" style="display:none">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <div>No results found</div>
+<header class="hero">
+  <div class="wrap">
+    <div class="brand-row">
+      <div class="logo">NCM</div>
+      <div><small>National Concrete Manufacturing</small><h1>Manpower Report</h1></div>
     </div>
+    <p>Operations headcount by department, with employee codes, job titles and worker shift assignments.</p>
   </div>
-</div>
+</header>
 
-<!-- WORKERS -->
-<div class="section" id="sec-workers">
-  <div class="search-bar">
-    <input type="text" id="srchWrk" placeholder="Search workers…" oninput="filterWorkers()">
-  </div>
-  <div class="shift-container">
-    <div class="shift-panel">
-      <div class="shift-hdr day">&#9728; Day Shift <span class="shift-count" id="dayCnt"></span></div>
-      <div class="tbl-wrap">
-        <table class="shift-table">
-          <thead><tr><th>#</th><th>Code</th><th>Name</th><th>Plant</th></tr></thead>
-          <tbody id="dayBody"></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="shift-panel">
-      <div class="shift-hdr night">&#9790; Night Shift <span class="shift-count" id="ngtCnt"></span></div>
-      <div class="tbl-wrap">
-        <table class="shift-table">
-          <thead><tr><th>#</th><th>Code</th><th>Name</th><th>Plant</th></tr></thead>
-          <tbody id="ngtBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+<section class="wrap kpis" id="kpis"></section>
 
-<!-- SUMMARY -->
-<div class="section" id="sec-summary">
-  <div class="sum-section" id="sumContent"></div>
-</div>
+<div class="nav"><div class="wrap">
+  <div class="seg" id="seg">
+    <button class="on" data-v="staff">Staff</button>
+    <button data-v="depts">Departments</button>
+    <button data-v="workers">Workers</button>
+  </div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Search name, code or job title" autocomplete="off">
+    <button class="clr" id="clr" aria-label="Clear search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+</div></div>
+
+<main class="wrap">
+  <section class="view on" id="v-staff">
+    <div class="chips" id="chips"></div>
+    <div class="meta" id="meta"></div>
+    <div class="list" id="list"></div>
+    <button class="more" id="more" hidden>Show more</button>
+  </section>
+
+  <section class="view" id="v-depts">
+    <div class="panel">
+      <h2>Headcount by department</h2>
+      <div class="sub">Tap a department to see its staff</div>
+      <div id="bars"></div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h2>Job titles</h2>
+      <div class="sub">Breakdown of roles inside each department</div>
+      <div id="roles"></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-workers">
+    <div class="shifts" id="shifts"></div>
+  </section>
+</main>
+
+<footer>NCM Operations &middot; Confidential, internal use only</footer>
 
 <script>
-const DATA = {"fl":[{"n":2,"c":3,"nm":"Aleksandr Boblak","t":"Deputy of CEO","d":"Administration"},{"n":3,"c":5,"nm":"Haytham Mohamed Ahmed Kamel","t":"Coordinator","d":"Production"},{"n":4,"c":6,"nm":"Ahmed Badawy Ahmed Ahmed","t":"Coordinator","d":"Production"},{"n":5,"c":12,"nm":"Mohamed Mahmoud Mohamed Mahmoud","t":"Pump Oiler","d":"Production"},{"n":6,"c":19,"nm":"Eslam Mohamed Gabr Mohamed","t":"Worker","d":"Production"},{"n":7,"c":26,"nm":"El Sayed Hosny El Sayed El Sayed","t":"Driver","d":"Administration"},{"n":8,"c":34,"nm":"Ahmed Ibrahim Zaki Abdulrahman","t":"IT Specialist","d":"Administration"},{"n":9,"c":43,"nm":"Ahmed Mohamed Salem Salem Shendy","t":"HSE Head","d":"Administration"},{"n":10,"c":44,"nm":"Khaled Arafa Mahmoud Disoky","t":"Transmixer driver (1 class)","d":"Production"},{"n":11,"c":57,"nm":"Abdulshafia Ahmed Sakr Gafar","t":"Worker","d":"Production"},{"n":12,"c":58,"nm":"Mohamed Salah Abdullatif El Saify","t":"Leading Engineer","d":"QC /Laboratory"},{"n":13,"c":59,"nm":"Mohamed El Sayed Mahmoud Dawood","t":"Forman","d":"Production"},{"n":14,"c":60,"nm":"Mustafa Ali Taha Ahmed","t":"Forman","d":"Production"},{"n":15,"c":66,"nm":"Alaa Hussien Hassan Korany","t":"Stock supervisor","d":"Stock"},{"n":16,"c":70,"nm":"Ahmed Mohamed Ratieb Abdullatif","t":"QC Engineer","d":"QC /Laboratory"},{"n":17,"c":73,"nm":"Tamer Mohamed Ibrahim Morsy","t":"Mixer operator class 1","d":"Production"},{"n":18,"c":74,"nm":"Mahmoud Mohamed Mohamed Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":19,"c":80,"nm":"Nader Botros Misheal  Yonan","t":"Transmixer driver (1 class)","d":"Production"},{"n":20,"c":81,"nm":"Husien Marzouk Saied Mansour","t":"Transmixer driver (1 class)","d":"Production"},{"n":21,"c":94,"nm":"Mohamed Ashraf Lotfy Mohamed","t":"Document Controller","d":"QC /Laboratory"},{"n":22,"c":96,"nm":"Ahmed Mohamed Khalil Saliem","t":"Diesl Mechanics","d":"Maintaince"},{"n":23,"c":101,"nm":"Islam Mohamed Zaky Mahdi","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":24,"c":114,"nm":"Emad Hamdy Shahat Ahmed","t":"Store keeper","d":"Stock"},{"n":25,"c":117,"nm":"Mohamed Hisham Abaas Mohamed","t":"Forman","d":"Production"},{"n":26,"c":120,"nm":"Mohamed Ahmed Saad Mohamed El Hadad","t":"Production Engineer","d":"Planning"},{"n":27,"c":122,"nm":"Mahmoud Ramadan Mohamed Hemida","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":28,"c":128,"nm":"Elena Makarova","t":"Deputy of Laboratory Head","d":"QC /Laboratory"},{"n":29,"c":130,"nm":"Ahmed Mohamed Mosaad Abdelwahab","t":"HR Specialist","d":"Administration"},{"n":30,"c":132,"nm":"Ahmed Abo El Fotoh Abo El Azam Mohamed","t":"Senior HR Specialist","d":"Administration"},{"n":31,"c":135,"nm":"Alaa Ahmed Hassan Ibrahim","t":"Transmixer driver (1 class)","d":"Production"},{"n":32,"c":145,"nm":"Ibrahim Mustafa El Shenawy Ibrahim","t":"Leading Engineer","d":"QC /Laboratory"},{"n":33,"c":153,"nm":"Mohamed Salah Ali Khalaf","t":"Transmixer driver (1 class)","d":"Production"},{"n":34,"c":157,"nm":"Ibrahim Mohamed Ahmed El Sayed","t":"Commercial Section Head","d":"Finance"},{"n":35,"c":160,"nm":"El Sibay Mohamed El Sibay Abdullatif","t":"Transmixer driver (1 class)","d":"Production"},{"n":36,"c":168,"nm":"Sameh Roubil Frez Bolas","t":"Transmixer driver (1 class)","d":"Production"},{"n":37,"c":176,"nm":"Ibrahem Abdulal Hassan Hashem","t":"Transmixer driver (1 class)","d":"Production"},{"n":38,"c":180,"nm":"Kareem Mohamed Ali Ahmed Kadara","t":"Transmixer driver (1 class)","d":"Production"},{"n":39,"c":185,"nm":"Mahmoud Abdelmoaty Hassan Elgalad","t":"Transmixer driver (1 class)","d":"Production"},{"n":40,"c":186,"nm":"Ramy Gerges Kamel Gerges","t":"Transmixer driver (1 class)","d":"Production"},{"n":41,"c":187,"nm":"Sharkawy Hamed Sharkawy Sabaak","t":"Transmixer driver (1 class)","d":"Production"},{"n":42,"c":191,"nm":"Abdulkreem Elsayed Abdulatif Elsayed","t":"Laborant","d":"QC /Laboratory"},{"n":43,"c":193,"nm":"Waheed Hamed Mohamed Elakhnawy","t":"Transmixer driver (1 class)","d":"Production"},{"n":44,"c":196,"nm":"Ahmed Magdy Hassan Elasskry","t":"Welder","d":"Maintaince"},{"n":45,"c":200,"nm":"Dmitrii Donchenko","t":"Plants Manager","d":"Production"},{"n":46,"c":203,"nm":"Ahmed Abdulmoneem Elsayed Mohamed","t":"Worker","d":"Production"},{"n":47,"c":206,"nm":"Younes Elsaeed Nasrallah Ghalab","t":"Transmixer driver (1 class)","d":"Production"},{"n":48,"c":207,"nm":"Abdulhamed Elsayed Abdulhamed Abdelaal","t":"Pump Operator","d":"Production"},{"n":49,"c":208,"nm":"Mohamed Abdulmgeed Mohamed Awad","t":"Pump Oiler","d":"Production"},{"n":50,"c":209,"nm":"Anwar Mohamed Elsayed Eltantawy","t":"foreman (installation)","d":"Production/Stationary pump"},{"n":51,"c":212,"nm":"Mohamed Abdelaziz Ahmed Elaskary","t":"Pump Operator","d":"Production"},{"n":52,"c":217,"nm":"Mohamed Ragab Abdulaziz Abdulrady","t":"Chief Engineer","d":"Maintaince"},{"n":53,"c":218,"nm":"Eslam Abdulhamed Abdulaal Sakr","t":"Transmixer driver (1 class)","d":"Production"},{"n":54,"c":221,"nm":"Kareem Ibrahem Ahmed Saber","t":"Transmixer driver (1 class)","d":"Production"},{"n":55,"c":222,"nm":"Ahmed Ibrahem Abdelazem Elshenawy","t":"Transmixer driver (1 class)","d":"Production"},{"n":56,"c":229,"nm":"Nader Abdulsamiea Abdulhakeem Zaky","t":"Mixer operator class 1","d":"Production"},{"n":57,"c":232,"nm":"Ahmed Saad Mohamed Rezk Abdulmawla","t":"Loader Driver","d":"Production"},{"n":58,"c":234,"nm":"Amr Abdulmaksoud Ramadan Helal","t":"Pump Operator","d":"Production"},{"n":59,"c":239,"nm":"Sameh Mamdouh Fathy Nouh","t":"Pump Operator","d":"Production"},{"n":60,"c":241,"nm":"Abdulfatah Mohamed Abdulfatah Mohamed","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":61,"c":242,"nm":"Amr Mohamed Abdulfatah Mohamed Gomaa","t":"Forman","d":"Production"},{"n":62,"c":244,"nm":"Ahmed Mohamed Fatoh Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":63,"c":247,"nm":"Ahmed Mohamed Abdallah Salama","t":"Pump Operator","d":"Production"},{"n":64,"c":255,"nm":"Abdo Ahmed Abdo Elaryan","t":"Pump Oiler","d":"Production"},{"n":65,"c":259,"nm":"Abdelrahman Hagag Khireshy Abdelmonem","t":"Worker","d":"Production"},{"n":66,"c":265,"nm":"Ahmed Mohamed Mahmoud Hassan","t":"Worker","d":"Production"},{"n":67,"c":285,"nm":"Memy Mohammed Ibrahim Ali","t":"Store Keeper","d":"Stock"},{"n":68,"c":288,"nm":"Ahmed Arafa Shams Abdrabo","t":"Transmixer driver (1 class)","d":"Production"},{"n":69,"c":290,"nm":"Sherif Anas Mohamed Ahmed Elshorbagy","t":"Transmixer driver (1 class)","d":"Production"},{"n":70,"c":294,"nm":"Ali Mohamed Ali Mohamed Elshenity","t":"Pump oiler","d":"Production"},{"n":71,"c":295,"nm":"Elsebay Mohamed Ramzy Aldesooqy","t":"Transmixer driver (1 class)","d":"Production"},{"n":72,"c":296,"nm":"Mohamed Mohamed Abdelwanes Maraey","t":"Transmixer driver (1 class)","d":"Production"},{"n":73,"c":300,"nm":"Waled Abdelmoneem Ali Mohamed Elgouhary","t":"Mixer operator class 1","d":"Production"},{"n":74,"c":304,"nm":"Ibrahim Mohamed Abdulgawad Elawedy","t":"Pump Oiler","d":"Production"},{"n":75,"c":305,"nm":"Mohammed Hamdy Mohammed Mousa","t":"Treasury Section Head","d":"Finance"},{"n":76,"c":312,"nm":"Ata Ibrahem Atta Hamza","t":"Leading Engineer","d":"QC /Laboratory"},{"n":77,"c":320,"nm":"Soliman Mohamed Soliman Mohamed","t":"Plant Mechanics","d":"Maintaince"},{"n":78,"c":325,"nm":"Abdelrahman Nady Abdelaziz Mohamed","t":"Mixer operator class 1","d":"Production"},{"n":79,"c":332,"nm":"Mostafa Mahmoud Ismail Naaem","t":"QC Engineer","d":"QC /Laboratory"},{"n":80,"c":334,"nm":"Hossam Mohamed Rashed Mohamed Atta","t":"Mixer operator class 1","d":"Production"},{"n":81,"c":336,"nm":"Ibrahem Saad Ibrahem Salem","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":82,"c":340,"nm":"Mohammed Gamal El Din Aly Mohammed","t":"Production Director","d":"Production"},{"n":83,"c":343,"nm":"Ibrahim Mohamed Mousa Diab Salah","t":"Transmixer driver (1 class)","d":"Production"},{"n":84,"c":346,"nm":"Adel Hamdy Ahmed Abas","t":"Stock supervisor","d":"Stock"},{"n":85,"c":349,"nm":"Mohamed Ahmed Mostafa Elsayed","t":"Mixer operator class 1","d":"Production"},{"n":86,"c":350,"nm":"Mohamed Ibrahem Abdelhady Hassan","t":"Mixer operator class 1","d":"Production"},{"n":87,"c":354,"nm":"Ahmed Mahmoud Shaban Abbas","t":"Mixer operator class 1","d":"Production"},{"n":88,"c":356,"nm":"Mostafa Salah Moslem Atia","t":"Worker","d":"Production"},{"n":89,"c":361,"nm":"Ahmed Yousef Mohamed Rezk Elnagar","t":"Tires man","d":"Maintaince"},{"n":90,"c":366,"nm":"Mohamed Mohamady Ghareb Mohamady","t":"Pump Oiler","d":"Production"},{"n":91,"c":374,"nm":"Mohamed Mohamed Abdulwahab Abdulwahed","t":"Pump Operator","d":"Production"},{"n":92,"c":375,"nm":"Moustafa Mohamed Abdallh Saad Alsayed","t":"Pump Operator","d":"Production"},{"n":93,"c":378,"nm":"Mohamed Farag Elsayed Farag","t":"Diesl Mechanics","d":"Maintaince"},{"n":94,"c":387,"nm":"Mahmoud Ramadan Abo Zaid Sayed","t":"Mixer operator class 1","d":"Production"},{"n":95,"c":390,"nm":"Amr Salah Mohamed Ali","t":"Deputy Of Production Director","d":"Production"},{"n":96,"c":397,"nm":"Ahmed Moawad Ahmed Yahia","t":"Worker 5%","d":"Administration"},{"n":97,"c":400,"nm":"Mohamed Ehab Abdelmonem Gaber","t":"HR Specialist","d":"Administration"},{"n":98,"c":403,"nm":"Mohamed Abdulrahman Gouda Ali","t":"Quality Inspector","d":"QC /Laboratory"},{"n":99,"c":406,"nm":"Mohamed El Sayed Mohamed Abdelrahman El Shorbagy","t":"HR Coordinator","d":"Administration"},{"n":100,"c":407,"nm":"Mohamed Abdellatif Mohamed Abdellatif","t":"HR Coordinator","d":"Administration"},{"n":101,"c":414,"nm":"Adel Sameh Mohamed Altokhy Amin","t":"Pump Oiler","d":"Production"},{"n":102,"c":418,"nm":"Mohamed Abdulaziz Mohamed Mabrok","t":"Worker 5%","d":"Administration"},{"n":103,"c":419,"nm":"Rafat Osama Sayed Abdulmaged","t":"Commercial Supervisor","d":"Finance"},{"n":104,"c":425,"nm":"Idreis Tuwair Qassem Waer","t":"Worker 5%","d":"Administration"},{"n":105,"c":427,"nm":"Ahmed Shaaban Gouda Mohamed","t":"Store Keeper","d":"Stock"},{"n":106,"c":428,"nm":"Ismail Mahmoud Abd Rabbo Ahmed","t":"Transmixer driver (1 class)","d":"Production"},{"n":107,"c":435,"nm":"Saied Gamal Saied Abdulkader","t":"Laborant","d":"QC /Laboratory"},{"n":108,"c":436,"nm":"Sameh Mohamed Elbadry","t":"Mixer operator class 1","d":"Production"},{"n":109,"c":438,"nm":"Sherif Mohamed Galal Mohamed","t":"Procurement Supervisor","d":"Procurement"},{"n":110,"c":439,"nm":"Islam Shahat Mohamed","t":"Worker","d":"Production"},{"n":111,"c":447,"nm":"Bassem Mohamed Ali Abdulhamed Hassan","t":"Worker","d":"Production"},{"n":112,"c":453,"nm":"Nouraldein Khalil Mohamed Khalil","t":"Pump Operator","d":"Production"},{"n":113,"c":454,"nm":"Elsayed Sabry Naeem Darwish","t":"Welder","d":"Maintaince"},{"n":114,"c":465,"nm":"Robin Sami  Karmy Ajban","t":"Worker","d":"Production"},{"n":115,"c":472,"nm":"Mostafa Mohamed Mahmoud Wanas","t":"Forman","d":"Production"},{"n":116,"c":481,"nm":"Ahmed Helmy Maghazi Abdo Ellaqani","t":"Pump Oiler","d":"Production"},{"n":117,"c":483,"nm":"Abdallah Mohamed Saied Mohamed","t":"Maintenance Engineer","d":"Production/Stationary pump"},{"n":118,"c":484,"nm":"Mohamed Amin Mousa Yahia","t":"Loader Driver","d":"Production"},{"n":119,"c":489,"nm":"Ibrahim Saeed Mohamed Ibrahim","t":"Worker 5%","d":"Administration"},{"n":120,"c":493,"nm":"Mohamed Wagih Ezzaldine Mohamed","t":"Lead Commercial","d":"Finance"},{"n":121,"c":496,"nm":"Mai Mohamed Rezk Mohamed Hussein","t":"Chief Engineer","d":"Planning"},{"n":122,"c":504,"nm":"Mohamed Shawky Thabet Hassan","t":"Transmixer driver (1 class)","d":"Production"},{"n":123,"c":508,"nm":"Hossam Mohamed Esmail Rashwan","t":"Mixer operator class 1","d":"Production"},{"n":124,"c":509,"nm":"Amir Ali Ezzaldin Omar","t":"Transmixer driver (1 class)","d":"Production"},{"n":125,"c":510,"nm":"Ayoub Lotfy Abdulhamid Mohamed Ayoub","t":"Transmixer driver (1 class)","d":"Production"},{"n":126,"c":515,"nm":"Mahmoud Mohamed Mahmoud Mohamed Morsy","t":"Worker","d":"Production"},{"n":127,"c":525,"nm":"Ahmed Mohamed Ahmed Ahmed Elkady","t":"Plants Manager","d":"Production"},{"n":128,"c":527,"nm":"Jihad Ashraf Ibrahim Ghalab","t":"Office administrator","d":"Administration"},{"n":129,"c":528,"nm":"Taher Shaaban Hussein Awad","t":"Forman","d":"Production"},{"n":130,"c":529,"nm":"Hassanein Eid Hassanein Mohamed","t":"Forman","d":"Production /Precast"},{"n":131,"c":539,"nm":"Ahmed Elsayed Saber Sinjab","t":"Tires man","d":"Maintaince"},{"n":132,"c":544,"nm":"Hamed Abdel Latif Hassan Sharif","t":"Pump Oiler","d":"Production"},{"n":133,"c":546,"nm":"Mostafa Ibrahim Mohamed Abdelgany","t":"Worker","d":"Production"},{"n":134,"c":548,"nm":"Khaled Sabry Hassan Elsayed","t":"Supervisor","d":"Economic safety"},{"n":135,"c":552,"nm":"Ibrahim Hasab Elnaby Elsayed Elsheikh","t":"Fitter","d":"Production /Precast"},{"n":136,"c":555,"nm":"Reda Ahmed Abdullhady Abo Hussein","t":"Supervisor","d":"Economic safety"},{"n":137,"c":558,"nm":"Eslam Yahia Ibrahim Abdullah","t":"Driver","d":"Administration"},{"n":138,"c":561,"nm":"Ahmed Hady Mahmoud Alsaket","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":139,"c":567,"nm":"Ahmed Elsayed Mohamed Mohamed","t":"Controller","d":"Economic safety"},{"n":140,"c":573,"nm":"Khaled Nasser Mohamed Abdullhamid","t":"Fitter","d":"Production /Precast"},{"n":141,"c":574,"nm":"Ahmed Khalil Mohamed Khalil","t":"Laboratory worker","d":"QC /Laboratory"},{"n":142,"c":580,"nm":"Mohamed Saber Abdulsalam Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":143,"c":585,"nm":"Ibrahim Mohamed Mahmoud","t":"Worker","d":"Production"},{"n":144,"c":593,"nm":"Mohamed Mahmoud Abdulaal Alsayed","t":"Laborant","d":"QC /Laboratory"},{"n":145,"c":599,"nm":"Ahmed Shalabi Abu Shaisha Shalabi","t":"Security manager","d":"Economic safety"},{"n":146,"c":600,"nm":"Omar Mwafy Ahmed Gadulkariem","t":"Laborant","d":"QC /Laboratory"},{"n":147,"c":602,"nm":"Abdullrahman Ali Mohamed Farag","t":"Transmixer driver (1 class)","d":"Production"},{"n":148,"c":604,"nm":"Saied Hasany Mousa Ahmed","t":"Loader Driver","d":"Production"},{"n":149,"c":605,"nm":"Hany Shaban Hamada Mohamed","t":"Loader Driver","d":"Production"},{"n":150,"c":612,"nm":"Mohamed Nady Abdulsatar Mohamed","t":"Controller","d":"Economic safety"},{"n":151,"c":614,"nm":"Abdellah Ahmed Mohamed Mahmoud","t":"Worker","d":"Production"},{"n":152,"c":616,"nm":"Ahmed Shokry Mahmoud Abdulaal","t":"Controller","d":"Economic safety"},{"n":153,"c":618,"nm":"Mohamed Ahmed Hussein Haridy Abdullrahman","t":"Worker","d":"Production"},{"n":154,"c":619,"nm":"Osama Hefnawy Ali Mohamed","t":"Laborant","d":"QC /Laboratory"},{"n":155,"c":620,"nm":"Mahmoud Mostafa Radwan Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":156,"c":621,"nm":"Hashem Abdullnaser Ateto Ibrahim","t":"Laborant","d":"QC /Laboratory"},{"n":157,"c":622,"nm":"Ahmed Abdullrahman Abdullah Mohamed","t":"Store Keeper","d":"Stock"},{"n":158,"c":626,"nm":"Fady Fawzy Shafik Eskandr","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":159,"c":628,"nm":"Khaled Mohamed Abdulsameea Mohamed","t":"Forman","d":"Production /Precast"},{"n":160,"c":632,"nm":"Saad Gamal Abdulgawad Elsayed","t":"Controller","d":"Economic safety"},{"n":161,"c":633,"nm":"Ahmed Mohamed Mohamed Hussin","t":"Controller","d":"Economic safety"},{"n":162,"c":638,"nm":"Sobih Salim Metwaly Sopih","t":"Diesl Mechanics","d":"Maintaince"},{"n":163,"c":641,"nm":"Ahmed Mohamed Eltaher Ismaeil","t":"Loader Driver","d":"Production"},{"n":164,"c":643,"nm":"Hazem Said Mohamed Ahmed","t":"Controller","d":"Economic safety"},{"n":165,"c":644,"nm":"Mustafa Tarek Abd Elfatah","t":"Head of Stocks Group","d":"Stock"},{"n":166,"c":645,"nm":"Ahmed Hussein Rady Hussein","t":"Loader Driver","d":"Production"},{"n":167,"c":646,"nm":"Atef Ibrahem Abed Abed","t":"Transmixer driver (1 class)","d":"Production"},{"n":168,"c":647,"nm":"Abdulmoty Mohamed Abdulmoty Ahmed","t":"Worker","d":"Production"},{"n":169,"c":648,"nm":"Ibrahim Gaber Abdulfatah Ibrahim","t":"Supervisor","d":"Economic safety"},{"n":170,"c":650,"nm":"Ahmed Ramadan Abu Zaid Ramadan","t":"Driver","d":"Administration"},{"n":171,"c":655,"nm":"Mahmoud Abdulmoneem Ryad Saber","t":"Driver","d":"Administration"},{"n":172,"c":658,"nm":"Elsayed Mohamed Elsayed Hizo","t":"Driver","d":"Administration"},{"n":173,"c":659,"nm":"Mohamed Saad Yossef Ellaqany","t":"Worker","d":"Production"},{"n":174,"c":661,"nm":"Mahmoud Gamal Mohamed Alfakharani","t":"welder","d":"Maintaince"},{"n":175,"c":662,"nm":"Mohamed Ali Elnabwey Mahmoud","t":"Forman","d":"Production"},{"n":176,"c":665,"nm":"Gomaa Awad Fayez Aboshenyar","t":"Worker","d":"Production"},{"n":177,"c":666,"nm":"Olga Orlova","t":"Head of administrative department","d":"Administration"},{"n":178,"c":671,"nm":"Elsayed Mohamed Sayed Ahmed","t":"Worker","d":"Production"},{"n":179,"c":674,"nm":"Ibrahim Fawzy Ahmed Hobulah","t":"Worker","d":"Production"},{"n":180,"c":676,"nm":"Ahmed Mohamed Ibrahem Ali","t":"Worker","d":"Production"},{"n":181,"c":677,"nm":"Mostafa Refaat Mahfouz","t":"Loader Driver","d":"Production"},{"n":182,"c":680,"nm":"Ahmed Anwar Eisa Ali","t":"Loader Driver","d":"Production"},{"n":183,"c":682,"nm":"Ziad Alaa Mohamed Al Sayed Omar","t":"Excavator Operator","d":"Production"},{"n":184,"c":684,"nm":"Bishoy Suleiman Miladeh Abdo","t":"Diesl Mechanics","d":"Maintaince"},{"n":185,"c":692,"nm":"Saad Mohamed Saad Saad Abdullkawy","t":"Worker","d":"Production"},{"n":186,"c":701,"nm":"Abdul Aal Sayed Zaki Saad Aldin","t":"HSE Officer","d":"Administration"},{"n":187,"c":705,"nm":"Gomaa Jaballah Ragheb Jaballah","t":"Worker","d":"Production"},{"n":188,"c":710,"nm":"Eslam Ashraf Badr Ahmed","t":"HSE Officer","d":"Administration"},{"n":189,"c":714,"nm":"Ahmed Mohamed Mohamdy Ibrahim","t":"Worker","d":"Production"},{"n":190,"c":718,"nm":"Mostafa Metwaly Elsayed Metwaly","t":"Worker","d":"Production"},{"n":191,"c":719,"nm":"Abdullah Elshahat Basyony Abdullah","t":"Laborant","d":"QC /Laboratory"},{"n":192,"c":722,"nm":"Uliana Karelina","t":"Head of Commercial","d":"Finance"},{"n":193,"c":727,"nm":"Hussein Mohamed Hussein Haridy","t":"Worker","d":"Production"},{"n":194,"c":732,"nm":"Hamed Mohamed Ramadan Othman Farag","t":"Worker","d":"Production"},{"n":195,"c":735,"nm":"Gaber Ahmed Ali Asran","t":"Worker","d":"Production"},{"n":196,"c":736,"nm":"Emad Aldin Abdul Hadi Fathi Abdul Hadi","t":"Mechanical Engineer","d":"Maintaince"},{"n":197,"c":739,"nm":"Ahmed Kamel Mostafa Ghazy","t":"Electromechanics","d":"Maintaince"},{"n":198,"c":740,"nm":"Gamal Rezk Mousa Rezk","t":"Transmixer driver (1 class)","d":"Production"},{"n":199,"c":743,"nm":"Mostafa Ahmed Eladly Abdullrahman","t":"Store Keeper","d":"Stock /Stationary pump"},{"n":200,"c":746,"nm":"Hesham Amin Mahmoud Hemida Sloma","t":"Worker","d":"Production"},{"n":201,"c":750,"nm":"Ahmed Mahmoud Abd Elwaged Mohamed","t":"Electromechanics","d":"Maintaince"},{"n":202,"c":753,"nm":"Abdulrahman Elgohary Elsayed Maawad","t":"Commercial Admin","d":"Finance"},{"n":203,"c":755,"nm":"Ahmed Ismael Ahmed Mohamed","t":"Worker","d":"Production"},{"n":204,"c":757,"nm":"Ahmed Mohamed Abdulghafar Blal","t":"Worker","d":"Production"},{"n":205,"c":758,"nm":"Ahmed Khamis Mohamed Hussein","t":"Forman","d":"Production"},{"n":206,"c":770,"nm":"Ahmed Mohamed Gaber Fath Allah","t":"Worker","d":"Production"},{"n":207,"c":772,"nm":"Abdulmohsen Mohamed Elshamly Ahmed","t":"Driver","d":"Administration"},{"n":208,"c":782,"nm":"Abdullrahman Anany Mohamed Anany","t":"Pump Operator","d":"Production"},{"n":209,"c":783,"nm":"Mohamed Abdullah Ali Ahmed Abdullaziz","t":"Plant Mechanics","d":"Maintaince"},{"n":210,"c":784,"nm":"Mahmoud Abdullnaby Mohamed Alhety","t":"Pump Operator","d":"Production"},{"n":211,"c":788,"nm":"Mohamed Ali Abdullrahman Abdullhafiz","t":"Accountant","d":"Finance"},{"n":212,"c":789,"nm":"Khalid Hassanin Mohamed Hassanin","t":"Senior Procurement specialist","d":"Procurement"},{"n":213,"c":790,"nm":"Amin Khalid Amin Abdullhamid","t":"Senior HSE Engineer","d":"Administration"},{"n":214,"c":791,"nm":"Amr Nihad Abdullmordy Abdullfatah","t":"Senior Procurement specialist","d":"Procurement"},{"n":215,"c":792,"nm":"Nasser Abdullrazik Mohamed Awad","t":"foreman (installation)","d":"Production/Stationary pump"},{"n":216,"c":794,"nm":"Amr Elshazly Mahmoud Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":217,"c":796,"nm":"Abdullah Mohamed Mahmoud Othman","t":"Pump Operator","d":"Production/Stationary pump"},{"n":218,"c":798,"nm":"Mahmoud Sayed Abdullrady Saleh","t":"Pump Operator","d":"Production/Stationary pump"},{"n":219,"c":808,"nm":"Mohamed Saeed Sayed Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":220,"c":810,"nm":"Mohamed Zakaria Kamel Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":221,"c":815,"nm":"Ibrahim Yousef Alfouli Yousef","t":"Store Keeper","d":"Stock /Stationary pump"},{"n":222,"c":816,"nm":"Mostafa Abdul Wali Ahmed mohamed","t":"welder","d":"Maintaince/Stationary pump"},{"n":223,"c":819,"nm":"Mohamed Nazmy Abdulaziz Ismaeil","t":"Transmixer driver (1 class)","d":"Production"},{"n":224,"c":824,"nm":"Ahmed Abdulfatah Ebid Ahmed","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":225,"c":827,"nm":"Ali Mohamed Abouldoh Ahmed","t":"Controller","d":"economic safety"},{"n":226,"c":832,"nm":"Mohamed Ali Abo Alhasan Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":227,"c":833,"nm":"Ibrahim Gamal Saad Moftah","t":"Document Controller","d":"QC /Laboratory"},{"n":228,"c":836,"nm":"Yossef Mohamed Rafat Hassan","t":"Pump Operator","d":"Production/Stationary pump"},{"n":229,"c":837,"nm":"Saeid Mohamed Ahmed Elhabshy","t":"Pump Operator","d":"Production/Stationary pump"},{"n":230,"c":838,"nm":"Shaaban Abdulmawgood Morsy Ibrahim","t":"Pump Operator","d":"Production"},{"n":231,"c":839,"nm":"Abd Elhamid Abd El Kareem Mohamed Musa","t":"Transmixer driver (1 class)","d":"Production"},{"n":232,"c":843,"nm":"Mohamed Elshazly Ahmed Elsayed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":233,"c":846,"nm":"Mohamed Afify Mohamed Afify","t":"Pump Operator","d":"Production"},{"n":234,"c":847,"nm":"Mohamed Sayed Abas Mohamed Nasr","t":"Pump Operator","d":"Production"},{"n":235,"c":850,"nm":"Farag Mohamed Abdulrazek Ftyan","t":"Pump Oiler","d":"Production"},{"n":236,"c":860,"nm":"Alaa Badwy Sayed Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":237,"c":867,"nm":"Mohamed Taha Mohamed Taha","t":"Driver","d":"Administration"},{"n":238,"c":869,"nm":"Ahmed Mohamed Salman Khalaf","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":239,"c":875,"nm":"Nader Abdullsayed Mohamed Abokofa","t":"Worker","d":"Production"},{"n":240,"c":876,"nm":"Yousef Mohamed Abdullhamed Allaqany","t":"Transmixer driver (1 class)","d":"Production"},{"n":241,"c":877,"nm":"Ahmed Mohamed Reda Hassan Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":242,"c":882,"nm":"Ahmed Abd El Latif Abdo Al Ramsisi","t":"Pump Operator","d":"Production"},{"n":243,"c":885,"nm":"Abd Rabbo Mahmoud Abd Rabo Al Jaradini","t":"Laborant","d":"QC /Laboratory"},{"n":244,"c":893,"nm":"Hassan Kamel Ali Salama","t":"Loader Driver","d":"Production"},{"n":245,"c":894,"nm":"Abdullah Mohamed Mahmoud Mohamed","t":"Loader Driver","d":"Production"},{"n":246,"c":896,"nm":"Ahmed Saied Ewais Ahmed","t":"Loader Driver","d":"Production"},{"n":247,"c":897,"nm":"Sobih Ramadan Mohamed Sayed","t":"Pump Operator","d":"Production"},{"n":248,"c":898,"nm":"Mahmoud Ahmed Hassanein Abdullal","t":"Worker","d":"Production"},{"n":249,"c":903,"nm":"Ahmed Samy Mohamed Omar","t":"Laborant","d":"QC /Laboratory"},{"n":250,"c":908,"nm":"Mohamed Ahmed Elnoby Ahmed","t":"Pump Oiler","d":"Production"},{"n":251,"c":910,"nm":"Mostafa Ibrahim Mahmoud Kashasha","t":"Loader Driver","d":"Production"},{"n":252,"c":912,"nm":"Ali Mohamed Ali Mohamed Alhmeidy","t":"Loader Driver","d":"Production"},{"n":253,"c":913,"nm":"Mohamed Magdy Mohamed Kamel","t":"Loader Driver","d":"Production"},{"n":254,"c":917,"nm":"Amin Mohamed Amin Abdullmonem","t":"Worker","d":"Production"},{"n":255,"c":918,"nm":"Mahmoud Hussin Abo Zeid Gaber","t":"HSE Officer","d":"Administration"},{"n":256,"c":920,"nm":"Eslam Mahmoud Ali Elsayed","t":"Pump Operator","d":"Production"},{"n":257,"c":927,"nm":"Mostafa Ahmed Younis Salim","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":258,"c":932,"nm":"Mohamed Adel Abdulmeneem Omar","t":"Transmixer driver (1 class)","d":"Production"},{"n":259,"c":939,"nm":"Ahmed Samir Mahmoud Ali","t":"Plant Mechanics","d":"Maintaince"},{"n":260,"c":940,"nm":"Hassan Nasr Mustafa Hassan","t":"Transmixer driver (1 class)","d":"Production"},{"n":261,"c":941,"nm":"Mohamed Antar Farag Salem","t":"Transmixer driver (1 class)","d":"Production"},{"n":262,"c":944,"nm":"Abdullrahman Omar Ismail Mohamed","t":"Worker","d":"Production"},{"n":263,"c":945,"nm":"Mohamed Fayoud Ibrahim Alsayed Abdullah","t":"Laborant","d":"QC /Laboratory"},{"n":264,"c":948,"nm":"Hassan Alsayed Ali Hussein","t":"Transmixer driver (1 class)","d":"Production"},{"n":265,"c":950,"nm":"Mahrous Alsayed Mahrous Alsayed","t":"Pump Operator","d":"Production"},{"n":266,"c":952,"nm":"Younis Mostafa Abdullsalam Mohamed","t":"Laborant","d":"QC /Laboratory"},{"n":267,"c":953,"nm":"Mohamed Saad Hegazi Roby","t":"Transmixer driver (1 class)","d":"Production"},{"n":268,"c":971,"nm":"Ahmed Ibrahim Ahmed Abd El Rahman","t":"Transmixer driver (1 class)","d":"Production"},{"n":269,"c":973,"nm":"Elsayed Hussein Ali Hussein Abdulhadi","t":"Transmixer driver (1 class)","d":"Production"},{"n":270,"c":974,"nm":"Ahmed Mohamed Mohamed Abdullgalil Elshekh","t":"Worker","d":"Production"},{"n":271,"c":975,"nm":"Hussein Khalil Hassan Ali","t":"Transmixer driver (1 class)","d":"Production"},{"n":272,"c":976,"nm":"Omar Mohamed Fawzy Ali Mahmoud","t":"Worker","d":"Production"},{"n":273,"c":977,"nm":"Hazem Mohamed Hassan Mohamed","t":"Lead Accountant","d":"Finance"},{"n":274,"c":981,"nm":"Sayed Saaed Mohamed Faraag","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":275,"c":984,"nm":"Sameh Ibrahim Abdulgany Mohamed","t":"Pump Operator","d":"Production"},{"n":276,"c":986,"nm":"Ahmed Abdullah Abd El Maqsoud Junaidi","t":"Procurement specialist","d":"Procurement"},{"n":277,"c":988,"nm":"Samir Al Sayed Mohamed Ali","t":"Laborant","d":"QC /Laboratory"},{"n":278,"c":991,"nm":"Mostafa Abdulsalam Meatemd Abdulrahman","t":"Excavator Operator","d":"Production"},{"n":279,"c":995,"nm":"Mohamed Samer Abdul Mohsen Saad","t":"Production Engineer","d":"Planning"},{"n":280,"c":999,"nm":"Ahmed Ali Mostafa Mohamed","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":281,"c":1000,"nm":"Denis Ezhov","t":"Head of Planning","d":"Planning"},{"n":282,"c":1001,"nm":"Karim Abdullah Mohamed Hanafi","t":"HR Coordinator","d":"Administration"},{"n":283,"c":1002,"nm":"Khaled ahmed abdulhay osman","t":"Planning Section Head","d":"Planning"},{"n":284,"c":1004,"nm":"mohamed khalifa mohamed metwaly","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":285,"c":1005,"nm":"Karim Sayed Snosy Abdel Basit","t":"Maintenance Engineer","d":"Production/Stationary pump"},{"n":286,"c":1006,"nm":"Moaid Kamal Ibrahim Al Gak","t":"Electrical Engineer","d":"Maintaince"},{"n":287,"c":1008,"nm":"Saleh Mohamed Saleh Ragab Eldabae","t":"Worker","d":"Production"},{"n":288,"c":1009,"nm":"Mahmoud Elsayed Khalifa Ahmed","t":"QC Engineer","d":"QC /Laboratory"},{"n":289,"c":1011,"nm":"Mohamed Abdelfattah Ahmed Hussien Shehata","t":"HR Coordinator","d":"Administration"},{"n":290,"c":1013,"nm":"Sara Nasr Mahmoud Ali","t":"HR Coordinator","d":"Administration"},{"n":291,"c":1017,"nm":"Medhat Nabeh Saad Aly Abosohil","t":"Pump Operator","d":"Production/Stationary pump"},{"n":292,"c":1023,"nm":"Ibrahim Mohamed Hanafy Mohamed","t":"Pump Oiler","d":"Production"},{"n":293,"c":1027,"nm":"Mohamed Ramadan Elsayed Mohamed","t":"stock assistant","d":"Stock"},{"n":294,"c":1032,"nm":"Reda Gomaa Elsayed Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":295,"c":1033,"nm":"Youseef Shaban Esmail Abo bakr","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":296,"c":1041,"nm":"Obayd Badry Obayd Mohamed","t":"Worker","d":"Production"},{"n":297,"c":1042,"nm":"Mohamed Kamel Helmy Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":298,"c":1047,"nm":"Ali Mostafa Ali Elhosseny","t":"Pump Operator","d":"Production/Stationary pump"},{"n":299,"c":1048,"nm":"Montaser Abdulla Mohamed Abo Elgheit","t":"Pump Operator","d":"Production"},{"n":300,"c":1056,"nm":"Ahmed Hamdy Mohamed Ahmed","t":"Electrical \u0026 plc control","d":"Maintaince"},{"n":301,"c":1058,"nm":"Ahmed Yehya Zakaria Eltanekhy","t":"Transmixer driver (1 class)","d":"Production"},{"n":302,"c":1059,"nm":"Mohamed Abo Zeid Mahmoud Ibrahim Abo Zaid","t":"Pump Oiler","d":"Production"},{"n":303,"c":1060,"nm":"Hany Amen Sayed Ali Zein","t":"Transmixer driver (1 class)","d":"Production"},{"n":304,"c":1061,"nm":"Mahmoud Abdullah Mohamed Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":305,"c":1063,"nm":"Abuelkaseem Abdulraouf Hussien","t":"Transmixer driver (1 class)","d":"Production"},{"n":306,"c":1065,"nm":"Adel Mohamed Abdelmohsin Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":307,"c":1066,"nm":"Ibrahim Khaled Saad Hamed","t":"Worker","d":"Production"},{"n":308,"c":1072,"nm":"Hassan Ibrahim Abdelmgeed Abaas","t":"Tires man","d":"Maintaince"},{"n":309,"c":1078,"nm":"Abdelrahman Mohamed Shaban","t":"Pump Oiler","d":"Production"},{"n":310,"c":1084,"nm":"Hamdy Saber Nwegie Awad","t":"Worker 5%","d":"Administration"},{"n":311,"c":1086,"nm":"Abdelsamad Mohamed Abdelhaliem Mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":312,"c":1087,"nm":"Aboulkomsan nagar mahmoud abdulaziz","t":"Worker","d":"Production"},{"n":313,"c":1090,"nm":"Mohamed Ahmed Abdelreheem Ali Edrees","t":"Procurement specialist","d":"Procurement"},{"n":314,"c":1091,"nm":"Mahmoud Mohamed Ahmed Mahmoud","t":"Mixer operator class 1","d":"Production"},{"n":315,"c":1098,"nm":"Aly Mohamed Abdelmgeed Mahmoud","t":"Transmixer driver (1 class)","d":"Production"},{"n":316,"c":1107,"nm":"Mohamed Ahmed Mostafa Hassan","t":"Pump Oiler","d":"Production"},{"n":317,"c":1109,"nm":"Mahmoud Abdelhafez Abdelhameed","t":"Transmixer driver (1 class)","d":"Production"},{"n":318,"c":1111,"nm":"Mahmoud Ibrahim Elsayed Ibrahim","t":"Pump Oiler","d":"Production"},{"n":319,"c":1112,"nm":"Ahmed Mouhsen Makmoud El Azab","t":"Pump Operator","d":"Production"},{"n":320,"c":1114,"nm":"Mohamed Ali Eid Abdeltawab","t":"Plant Mechanics","d":"Maintaince"},{"n":321,"c":1117,"nm":"Mohamed Farag Abdelgawad Elsayed","t":"Controller","d":"Economic safety"},{"n":322,"c":1121,"nm":"Mohamed Shahat Mahmoud Khaleil","t":"Pump Oiler","d":"Production"},{"n":323,"c":1126,"nm":"Anna Lenskaia","t":"Finance Manager","d":"Finance"},{"n":324,"c":1128,"nm":"Adel Ramadan Abas Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":325,"c":1129,"nm":"Mahmoud Ateto Gadelkareem Eltayeb","t":"Transmixer driver (1 class)","d":"Production"},{"n":326,"c":1131,"nm":"Abdelrahman Ahmed Youness Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":327,"c":1133,"nm":"Youseef Abdelhady Abdellatef Lotfy","t":"Chief Engineer","d":"Planning"},{"n":328,"c":1140,"nm":"Kamal ahmed kamal elsayed mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":329,"c":1143,"nm":"Mohamed Hassan Mohamed Abdelwahab","t":"Pump Oiler","d":"Production"},{"n":330,"c":1147,"nm":"Mahmoud Saleh Mohamed Kamal","t":"Loader Driver","d":"Production"},{"n":331,"c":1148,"nm":"Ahmed Ali Abdelazim Ali Ibrahim","t":"Weighbridge operators","d":"Stock"},{"n":332,"c":1152,"nm":"Mohamed Nabil Mohamed Khayry","t":"Procurement Head","d":"Procurement"},{"n":333,"c":1153,"nm":"Ali Ahmed Ali Ahmed","t":"Worker","d":"Production"},{"n":334,"c":1154,"nm":"Abdelmged Ismail Abdelmged Ahmed","t":"Transmixer driver (1 class)","d":"Production"},{"n":335,"c":1159,"nm":"Mohamed Kamal Abdelghafar Hasan","t":"Plant Mechanics","d":"Maintaince"},{"n":336,"c":1161,"nm":"Ayman Ragab Ghazaly Ahmed","t":"Transmixer driver (1 class)","d":"Production"},{"n":337,"c":1163,"nm":"Mahmoud Gamal Mahmoud Gadalkareem","t":"welder","d":"Maintaince/Stationary pump"},{"n":338,"c":1164,"nm":"Ayman Abdelnaby Hussien Hassan","t":"Transmixer driver (1 class)","d":"Production"},{"n":339,"c":1167,"nm":"Ahmed Abdelmged Ahmed Taman","t":"Transmixer driver (1 class)","d":"Production"},{"n":340,"c":1172,"nm":"Gaber Mostafa Gaber Mohamed Ali","t":"Transmixer driver (1 class)","d":"Production"},{"n":341,"c":1173,"nm":"Mohamed Amr Abdelwahab","t":"Planning Engineer","d":"Planning"},{"n":342,"c":1177,"nm":"Mohamed Mohamed Ismail Taman","t":"Transmixer driver (1 class)","d":"Production"},{"n":343,"c":1178,"nm":"Hatem Abdelkader Ismail Saleh","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":344,"c":1179,"nm":"Hassan Said Ahmed Reda","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":345,"c":1180,"nm":"Mostafa Abdelmawgod Mostafa Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":346,"c":1181,"nm":"Sayed Mohamed Mostafa","t":"Transmixer driver (1 class)","d":"Production"},{"n":347,"c":1183,"nm":"Abdelrahman Mahmoud Abas Hassan Mahmoud","t":"environmental engineer","d":"administration"},{"n":348,"c":1184,"nm":"Mostafa Hassan Hassan Moghazy","t":"Pump Oiler","d":"Production"},{"n":349,"c":1186,"nm":"Abdullah Ahmed Reda Saleh","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":350,"c":1187,"nm":"omaier Esmat Abdo Ellakany","t":"Pump Operator","d":"Production"},{"n":351,"c":1189,"nm":"Talaea Kamel Darwesh Kamel","t":"HSE Engineer","d":"administration"},{"n":352,"c":1190,"nm":"Mohamed Nazeh Abdelgelel Hamed","t":"Planning Engineer","d":"Planning"},{"n":353,"c":1192,"nm":"Emad Mahmoud Abdelaty Shehata","t":"Pump Operator","d":"Production/Stationary pump"},{"n":354,"c":1194,"nm":"Mouhab Magdy Saad Kotb Mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":355,"c":1198,"nm":"Mahmoud Ibrahim Gad Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":356,"c":1202,"nm":"Adel Attaallah Saady Saber","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":357,"c":1206,"nm":"Taha Amr Taha Mohamed Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":358,"c":1209,"nm":"Karim Abd elMoati Ali Abd ElMoati","t":"Electrical \u0026 plc control","d":"Maintaince"},{"n":359,"c":1210,"nm":"Ahmed Mohamed Abdallah Mahmoud","t":"Stock assistant","d":"Stock"},{"n":360,"c":1212,"nm":"Mohamed elsayed Mahmoud Dawoud","t":"Transmixer driver (1 class)","d":"Production"},{"n":361,"c":1217,"nm":"Ahmed Esam Mohamed Abdelmotagali","t":"Store Worker","d":"Stock"},{"n":362,"c":1219,"nm":"Moamen Ali Amin Amin","t":"HSE Engineer","d":"administration"},{"n":363,"c":1220,"nm":"Adham Elsayed Mostafa Elsayed","t":"HSE Engineer","d":"administration"},{"n":364,"c":1221,"nm":"Rustam Iaushev","t":"Metrolegest","d":"QC /Laboratory"},{"n":365,"c":1223,"nm":"Mahmoud Khaled Mahmoud Mohamed","t":"Treasury specialist","d":"Finance"},{"n":366,"c":1224,"nm":"Tatiana chalenka","t":"Head of Commercial","d":"Finance"},{"n":367,"c":1225,"nm":"Ahmed ramadan abdrabo mohamed","t":"QC Engineer","d":"QC /Laboratory"},{"n":368,"c":1226,"nm":"Mousa Moftah Saad Emdeda","t":"Worker 5%","d":"Administration"},{"n":369,"c":1227,"nm":"Mohamed Elsayed Abdelhameid Elsayed","t":"Deputy of Chief Accountant","d":"Finance"},{"n":370,"c":1228,"nm":"Ebeed Amin Omar Mohamed Lebza","t":"HSE Officer","d":"Administration"},{"n":371,"c":1229,"nm":"Mohamed Ali Fathy Ali","t":"Laborant","d":"QC /Laboratory"},{"n":372,"c":1230,"nm":"Hisham Mohamed Ali Mohamed","t":"Deputy of Chief Accountant","d":"Finance"},{"n":373,"c":1231,"nm":"Heba Tarek Housein Nageeb","t":"Office administrator","d":"Administration"},{"n":374,"c":1232,"nm":"Eid Ayoub Mohamed Mohamed Gad Elgamal","t":"Store Worker","d":"Stock"},{"n":375,"c":1233,"nm":"Mahmoud abdulmenem goda farag","t":"Pump Oiler","d":"Production"},{"n":376,"c":1235,"nm":"Ibrahim Mahmoud Mohamed Abdelsamad","t":"Laboratory worker","d":"QC /Laboratory"},{"n":377,"c":1236,"nm":"Mohamed Wageh Masoud Mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":378,"c":1237,"nm":"Hamed Kamal ali Ismail","t":"QC Engineer","d":"QC /Laboratory"},{"n":379,"c":1238,"nm":"Mahmoud Ahmed Mohamed Abdelaal","t":"Weighbridge operators","d":"Stock"},{"n":380,"c":1239,"nm":"Ehab Tawfek ouraby anwer","t":"Worker","d":"Production"},{"n":381,"c":1240,"nm":"Ibrahim Nabil Ibrahim Elsaber","t":"Laboratory worker","d":"QC /Laboratory"},{"n":382,"c":1241,"nm":"Mahmoud Ibrahim Abdelmageed Khalil","t":"HSE Engineer","d":"administration"},{"n":383,"c":1242,"nm":"Anter Adel Elsayed Hassan","t":"Worker","d":"Production"}],"dw":[{"n":1,"c":1239,"nm":"Ehab Tawfek ouraby anwer","p":"LIBHEER 1"},{"n":2,"c":1041,"nm":"Obayd Badry Obayd Mohamed","p":""},{"n":3,"c":57,"nm":"Abdulshafia Ahmed Sakr Gafar","p":""},{"n":4,"c":692,"nm":"Saad Mohamed Saad Saad Abdullkawy","p":""},{"n":5,"c":1087,"nm":"Aboulkomsan nagar mahmoud abdulaziz","p":"LIBHEER 2"},{"n":6,"c":618,"nm":"Mohamed Ahmed Hussein Haridy Abdullrahman","p":""},{"n":7,"c":735,"nm":"Gaber Ahmed Ali Asran","p":""},{"n":8,"c":515,"nm":"Mahmoud Mohamed Mahmoud Mohamed Morsy","p":""},{"n":9,"c":898,"nm":"Mahmoud Ahmed Hassanein Abdullal","p":"VURMAK 3"},{"n":10,"c":647,"nm":"Abdulmoty Mohamed Abdulmoty Ahmed","p":""},{"n":11,"c":692,"nm":"Saad Mohamed Saad Saad Abdullkawy","p":""},{"n":12,"c":757,"nm":"Ahmed Mohamed Abdulghafar Blal","p":""},{"n":13,"c":671,"nm":"Elsayed Mohamed Sayed Ahmed","p":"VURMAK 4"},{"n":14,"c":356,"nm":"Mostafa Salah Moslem Atia","p":""},{"n":15,"c":447,"nm":"Bassem Mohamed Ali Abdulhamed Hassan","p":""},{"n":16,"c":465,"nm":"Robin Sami  Karmy Ajban","p":""},{"n":17,"c":974,"nm":"Ahmed Mohamed Mohamed Abdullgalil Elshekh","p":"TRUCK SHEET"},{"n":18,"c":674,"nm":"Ibrahim Fawzy Ahmed Hobulah","p":""},{"n":19,"c":746,"nm":"Hesham Amin Mahmoud Hemida Sloma","p":""},{"n":20,"c":714,"nm":"Ahmed Mohamed Mohamdy Ibrahim","p":"ACT"},{"n":21,"c":439,"nm":"Islam Shahat Mohamed","p":"GROUND TANK"},{"n":22,"c":203,"nm":"Ahmed Abdulmoneem Elsayed Mohamed","p":""},{"n":23,"c":732,"nm":"Hamed Mohamed Ramadan Othman Farag","p":""},{"n":24,"c":19,"nm":"Eslam Mohamed Gabr Mohamed","p":"OFFICE BOY"},{"n":25,"c":770,"nm":"Ahmed Mohamed Gaber Fath Allah","p":""},{"n":26,"c":755,"nm":"Ahmed Ismael Ahmed Mohamed","p":""}],"nw":[{"n":1,"c":917,"nm":"Amin Mohamed Amin Abdullmonem","p":"LIBHEER 1"},{"n":2,"c":265,"nm":"Ahmed Mohamed Mahmoud Hassan","p":""},{"n":3,"c":718,"nm":"Moustafa Metwaly Elsayed Metwaly","p":""},{"n":4,"c":1066,"nm":"Ibrahim Khaled Saad Hamed","p":""},{"n":5,"c":614,"nm":"Abdellah Ahmed Mohamed Mahmoud","p":"LIBHEER 2"},{"n":6,"c":875,"nm":"Nader Abdullsayed Mohamed Abokofa","p":""},{"n":7,"c":259,"nm":"Abdelrahman Hagag Khireshy Abdelmonem","p":""},{"n":8,"c":705,"nm":"Gomaa Jaballah Ragheb Jaballah","p":"VURMAK 3"},{"n":9,"c":546,"nm":"Mostafa Ibrahim Mohamed Abdelgany","p":""},{"n":10,"c":976,"nm":"Omar Mohamed Fawzy Ali Mahmoud","p":""},{"n":11,"c":665,"nm":"Gomaa Awad Fayez Aboshenyar","p":"VURMAK 4"},{"n":12,"c":1153,"nm":"Ali Ahmed Ali Ahmed","p":""},{"n":13,"c":676,"nm":"Ahmed Mohamed Ibrahem Ali","p":""},{"n":14,"c":585,"nm":"Ibrahim Mohamed Mahmoud","p":"HOUSE KEEPING"},{"n":15,"c":727,"nm":"Hussein Mohamed Hussein Haridy","p":""},{"n":16,"c":944,"nm":"Abdullrahman Omar Ismail Mohamed","p":""},{"n":17,"c":1242,"nm":"Anter Adel Elsayed Hassan","p":""},{"n":18,"c":1008,"nm":"Saleh Mohamed Saleh Ragab Eldabae","p":"ACCIDENT"}],"sm":[],"ph":[]}
-;
-</script>
-<script>
+const RAW = {"fl":[{"n":2,"c":3,"nm":"Aleksandr Boblak","t":"Deputy of CEO","d":"Administration"},{"n":3,"c":5,"nm":"Haytham Mohamed Ahmed Kamel","t":"Coordinator","d":"Production"},{"n":4,"c":6,"nm":"Ahmed Badawy Ahmed Ahmed","t":"Coordinator","d":"Production"},{"n":5,"c":12,"nm":"Mohamed Mahmoud Mohamed Mahmoud","t":"Pump Oiler","d":"Production"},{"n":6,"c":19,"nm":"Eslam Mohamed Gabr Mohamed","t":"Worker","d":"Production"},{"n":7,"c":26,"nm":"El Sayed Hosny El Sayed El Sayed","t":"Driver","d":"Administration"},{"n":8,"c":34,"nm":"Ahmed Ibrahim Zaki Abdulrahman","t":"IT Specialist","d":"Administration"},{"n":9,"c":43,"nm":"Ahmed Mohamed Salem Salem Shendy","t":"HSE Head","d":"Administration"},{"n":10,"c":44,"nm":"Khaled Arafa Mahmoud Disoky","t":"Transmixer driver (1 class)","d":"Production"},{"n":11,"c":57,"nm":"Abdulshafia Ahmed Sakr Gafar","t":"Worker","d":"Production"},{"n":12,"c":58,"nm":"Mohamed Salah Abdullatif El Saify","t":"Leading Engineer","d":"QC /Laboratory"},{"n":13,"c":59,"nm":"Mohamed El Sayed Mahmoud Dawood","t":"Forman","d":"Production"},{"n":14,"c":60,"nm":"Mustafa Ali Taha Ahmed","t":"Forman","d":"Production"},{"n":15,"c":66,"nm":"Alaa Hussien Hassan Korany","t":"Stock supervisor","d":"Stock"},{"n":16,"c":70,"nm":"Ahmed Mohamed Ratieb Abdullatif","t":"QC Engineer","d":"QC /Laboratory"},{"n":17,"c":73,"nm":"Tamer Mohamed Ibrahim Morsy","t":"Mixer operator class 1","d":"Production"},{"n":18,"c":74,"nm":"Mahmoud Mohamed Mohamed Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":19,"c":80,"nm":"Nader Botros Misheal  Yonan","t":"Transmixer driver (1 class)","d":"Production"},{"n":20,"c":81,"nm":"Husien Marzouk Saied Mansour","t":"Transmixer driver (1 class)","d":"Production"},{"n":21,"c":94,"nm":"Mohamed Ashraf Lotfy Mohamed","t":"Document Controller","d":"QC /Laboratory"},{"n":22,"c":96,"nm":"Ahmed Mohamed Khalil Saliem","t":"Diesl Mechanics","d":"Maintaince"},{"n":23,"c":101,"nm":"Islam Mohamed Zaky Mahdi","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":24,"c":114,"nm":"Emad Hamdy Shahat Ahmed","t":"Store keeper","d":"Stock"},{"n":25,"c":117,"nm":"Mohamed Hisham Abaas Mohamed","t":"Forman","d":"Production"},{"n":26,"c":120,"nm":"Mohamed Ahmed Saad Mohamed El Hadad","t":"Production Engineer","d":"Planning"},{"n":27,"c":122,"nm":"Mahmoud Ramadan Mohamed Hemida","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":28,"c":128,"nm":"Elena Makarova","t":"Deputy of Laboratory Head","d":"QC /Laboratory"},{"n":29,"c":130,"nm":"Ahmed Mohamed Mosaad Abdelwahab","t":"HR Specialist","d":"Administration"},{"n":30,"c":132,"nm":"Ahmed Abo El Fotoh Abo El Azam Mohamed","t":"Senior HR Specialist","d":"Administration"},{"n":31,"c":135,"nm":"Alaa Ahmed Hassan Ibrahim","t":"Transmixer driver (1 class)","d":"Production"},{"n":32,"c":145,"nm":"Ibrahim Mustafa El Shenawy Ibrahim","t":"Leading Engineer","d":"QC /Laboratory"},{"n":33,"c":153,"nm":"Mohamed Salah Ali Khalaf","t":"Transmixer driver (1 class)","d":"Production"},{"n":34,"c":157,"nm":"Ibrahim Mohamed Ahmed El Sayed","t":"Commercial Section Head","d":"Finance"},{"n":35,"c":160,"nm":"El Sibay Mohamed El Sibay Abdullatif","t":"Transmixer driver (1 class)","d":"Production"},{"n":36,"c":168,"nm":"Sameh Roubil Frez Bolas","t":"Transmixer driver (1 class)","d":"Production"},{"n":37,"c":176,"nm":"Ibrahem Abdulal Hassan Hashem","t":"Transmixer driver (1 class)","d":"Production"},{"n":38,"c":180,"nm":"Kareem Mohamed Ali Ahmed Kadara","t":"Transmixer driver (1 class)","d":"Production"},{"n":39,"c":185,"nm":"Mahmoud Abdelmoaty Hassan Elgalad","t":"Transmixer driver (1 class)","d":"Production"},{"n":40,"c":186,"nm":"Ramy Gerges Kamel Gerges","t":"Transmixer driver (1 class)","d":"Production"},{"n":41,"c":187,"nm":"Sharkawy Hamed Sharkawy Sabaak","t":"Transmixer driver (1 class)","d":"Production"},{"n":42,"c":191,"nm":"Abdulkreem Elsayed Abdulatif Elsayed","t":"Laborant","d":"QC /Laboratory"},{"n":43,"c":193,"nm":"Waheed Hamed Mohamed Elakhnawy","t":"Transmixer driver (1 class)","d":"Production"},{"n":44,"c":196,"nm":"Ahmed Magdy Hassan Elasskry","t":"Welder","d":"Maintaince"},{"n":45,"c":200,"nm":"Dmitrii Donchenko","t":"Plants Manager","d":"Production"},{"n":46,"c":203,"nm":"Ahmed Abdulmoneem Elsayed Mohamed","t":"Worker","d":"Production"},{"n":47,"c":206,"nm":"Younes Elsaeed Nasrallah Ghalab","t":"Transmixer driver (1 class)","d":"Production"},{"n":48,"c":207,"nm":"Abdulhamed Elsayed Abdulhamed Abdelaal","t":"Pump Operator","d":"Production"},{"n":49,"c":208,"nm":"Mohamed Abdulmgeed Mohamed Awad","t":"Pump Oiler","d":"Production"},{"n":50,"c":209,"nm":"Anwar Mohamed Elsayed Eltantawy","t":"foreman (installation)","d":"Production/Stationary pump"},{"n":51,"c":212,"nm":"Mohamed Abdelaziz Ahmed Elaskary","t":"Pump Operator","d":"Production"},{"n":52,"c":217,"nm":"Mohamed Ragab Abdulaziz Abdulrady","t":"Chief Engineer","d":"Maintaince"},{"n":53,"c":218,"nm":"Eslam Abdulhamed Abdulaal Sakr","t":"Transmixer driver (1 class)","d":"Production"},{"n":54,"c":221,"nm":"Kareem Ibrahem Ahmed Saber","t":"Transmixer driver (1 class)","d":"Production"},{"n":55,"c":222,"nm":"Ahmed Ibrahem Abdelazem Elshenawy","t":"Transmixer driver (1 class)","d":"Production"},{"n":56,"c":229,"nm":"Nader Abdulsamiea Abdulhakeem Zaky","t":"Mixer operator class 1","d":"Production"},{"n":57,"c":232,"nm":"Ahmed Saad Mohamed Rezk Abdulmawla","t":"Loader Driver","d":"Production"},{"n":58,"c":234,"nm":"Amr Abdulmaksoud Ramadan Helal","t":"Pump Operator","d":"Production"},{"n":59,"c":239,"nm":"Sameh Mamdouh Fathy Nouh","t":"Pump Operator","d":"Production"},{"n":60,"c":241,"nm":"Abdulfatah Mohamed Abdulfatah Mohamed","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":61,"c":242,"nm":"Amr Mohamed Abdulfatah Mohamed Gomaa","t":"Forman","d":"Production"},{"n":62,"c":244,"nm":"Ahmed Mohamed Fatoh Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":63,"c":247,"nm":"Ahmed Mohamed Abdallah Salama","t":"Pump Operator","d":"Production"},{"n":64,"c":255,"nm":"Abdo Ahmed Abdo Elaryan","t":"Pump Oiler","d":"Production"},{"n":65,"c":259,"nm":"Abdelrahman Hagag Khireshy Abdelmonem","t":"Worker","d":"Production"},{"n":66,"c":265,"nm":"Ahmed Mohamed Mahmoud Hassan","t":"Worker","d":"Production"},{"n":67,"c":285,"nm":"Memy Mohammed Ibrahim Ali","t":"Store Keeper","d":"Stock"},{"n":68,"c":288,"nm":"Ahmed Arafa Shams Abdrabo","t":"Transmixer driver (1 class)","d":"Production"},{"n":69,"c":290,"nm":"Sherif Anas Mohamed Ahmed Elshorbagy","t":"Transmixer driver (1 class)","d":"Production"},{"n":70,"c":294,"nm":"Ali Mohamed Ali Mohamed Elshenity","t":"Pump oiler","d":"Production"},{"n":71,"c":295,"nm":"Elsebay Mohamed Ramzy Aldesooqy","t":"Transmixer driver (1 class)","d":"Production"},{"n":72,"c":296,"nm":"Mohamed Mohamed Abdelwanes Maraey","t":"Transmixer driver (1 class)","d":"Production"},{"n":73,"c":300,"nm":"Waled Abdelmoneem Ali Mohamed Elgouhary","t":"Mixer operator class 1","d":"Production"},{"n":74,"c":304,"nm":"Ibrahim Mohamed Abdulgawad Elawedy","t":"Pump Oiler","d":"Production"},{"n":75,"c":305,"nm":"Mohammed Hamdy Mohammed Mousa","t":"Treasury Section Head","d":"Finance"},{"n":76,"c":312,"nm":"Ata Ibrahem Atta Hamza","t":"Leading Engineer","d":"QC /Laboratory"},{"n":77,"c":320,"nm":"Soliman Mohamed Soliman Mohamed","t":"Plant Mechanics","d":"Maintaince"},{"n":78,"c":325,"nm":"Abdelrahman Nady Abdelaziz Mohamed","t":"Mixer operator class 1","d":"Production"},{"n":79,"c":332,"nm":"Mostafa Mahmoud Ismail Naaem","t":"QC Engineer","d":"QC /Laboratory"},{"n":80,"c":334,"nm":"Hossam Mohamed Rashed Mohamed Atta","t":"Mixer operator class 1","d":"Production"},{"n":81,"c":336,"nm":"Ibrahem Saad Ibrahem Salem","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":82,"c":340,"nm":"Mohammed Gamal El Din Aly Mohammed","t":"Production Director","d":"Production"},{"n":83,"c":343,"nm":"Ibrahim Mohamed Mousa Diab Salah","t":"Transmixer driver (1 class)","d":"Production"},{"n":84,"c":346,"nm":"Adel Hamdy Ahmed Abas","t":"Stock supervisor","d":"Stock"},{"n":85,"c":349,"nm":"Mohamed Ahmed Mostafa Elsayed","t":"Mixer operator class 1","d":"Production"},{"n":86,"c":350,"nm":"Mohamed Ibrahem Abdelhady Hassan","t":"Mixer operator class 1","d":"Production"},{"n":87,"c":354,"nm":"Ahmed Mahmoud Shaban Abbas","t":"Mixer operator class 1","d":"Production"},{"n":88,"c":356,"nm":"Mostafa Salah Moslem Atia","t":"Worker","d":"Production"},{"n":89,"c":361,"nm":"Ahmed Yousef Mohamed Rezk Elnagar","t":"Tires man","d":"Maintaince"},{"n":90,"c":366,"nm":"Mohamed Mohamady Ghareb Mohamady","t":"Pump Oiler","d":"Production"},{"n":91,"c":374,"nm":"Mohamed Mohamed Abdulwahab Abdulwahed","t":"Pump Operator","d":"Production"},{"n":92,"c":375,"nm":"Moustafa Mohamed Abdallh Saad Alsayed","t":"Pump Operator","d":"Production"},{"n":93,"c":378,"nm":"Mohamed Farag Elsayed Farag","t":"Diesl Mechanics","d":"Maintaince"},{"n":94,"c":387,"nm":"Mahmoud Ramadan Abo Zaid Sayed","t":"Mixer operator class 1","d":"Production"},{"n":95,"c":390,"nm":"Amr Salah Mohamed Ali","t":"Deputy Of Production Director","d":"Production"},{"n":96,"c":397,"nm":"Ahmed Moawad Ahmed Yahia","t":"Worker 5%","d":"Administration"},{"n":97,"c":400,"nm":"Mohamed Ehab Abdelmonem Gaber","t":"HR Specialist","d":"Administration"},{"n":98,"c":403,"nm":"Mohamed Abdulrahman Gouda Ali","t":"Quality Inspector","d":"QC /Laboratory"},{"n":99,"c":406,"nm":"Mohamed El Sayed Mohamed Abdelrahman El Shorbagy","t":"HR Coordinator","d":"Administration"},{"n":100,"c":407,"nm":"Mohamed Abdellatif Mohamed Abdellatif","t":"HR Coordinator","d":"Administration"},{"n":101,"c":414,"nm":"Adel Sameh Mohamed Altokhy Amin","t":"Pump Oiler","d":"Production"},{"n":102,"c":418,"nm":"Mohamed Abdulaziz Mohamed Mabrok","t":"Worker 5%","d":"Administration"},{"n":103,"c":419,"nm":"Rafat Osama Sayed Abdulmaged","t":"Commercial Supervisor","d":"Finance"},{"n":104,"c":425,"nm":"Idreis Tuwair Qassem Waer","t":"Worker 5%","d":"Administration"},{"n":105,"c":427,"nm":"Ahmed Shaaban Gouda Mohamed","t":"Store Keeper","d":"Stock"},{"n":106,"c":428,"nm":"Ismail Mahmoud Abd Rabbo Ahmed","t":"Transmixer driver (1 class)","d":"Production"},{"n":107,"c":435,"nm":"Saied Gamal Saied Abdulkader","t":"Laborant","d":"QC /Laboratory"},{"n":108,"c":436,"nm":"Sameh Mohamed Elbadry","t":"Mixer operator class 1","d":"Production"},{"n":109,"c":438,"nm":"Sherif Mohamed Galal Mohamed","t":"Procurement Supervisor","d":"Procurement"},{"n":110,"c":439,"nm":"Islam Shahat Mohamed","t":"Worker","d":"Production"},{"n":111,"c":447,"nm":"Bassem Mohamed Ali Abdulhamed Hassan","t":"Worker","d":"Production"},{"n":112,"c":453,"nm":"Nouraldein Khalil Mohamed Khalil","t":"Pump Operator","d":"Production"},{"n":113,"c":454,"nm":"Elsayed Sabry Naeem Darwish","t":"Welder","d":"Maintaince"},{"n":114,"c":465,"nm":"Robin Sami  Karmy Ajban","t":"Worker","d":"Production"},{"n":115,"c":472,"nm":"Mostafa Mohamed Mahmoud Wanas","t":"Forman","d":"Production"},{"n":116,"c":481,"nm":"Ahmed Helmy Maghazi Abdo Ellaqani","t":"Pump Oiler","d":"Production"},{"n":117,"c":483,"nm":"Abdallah Mohamed Saied Mohamed","t":"Maintenance Engineer","d":"Production/Stationary pump"},{"n":118,"c":484,"nm":"Mohamed Amin Mousa Yahia","t":"Loader Driver","d":"Production"},{"n":119,"c":489,"nm":"Ibrahim Saeed Mohamed Ibrahim","t":"Worker 5%","d":"Administration"},{"n":120,"c":493,"nm":"Mohamed Wagih Ezzaldine Mohamed","t":"Lead Commercial","d":"Finance"},{"n":121,"c":496,"nm":"Mai Mohamed Rezk Mohamed Hussein","t":"Chief Engineer","d":"Planning"},{"n":122,"c":504,"nm":"Mohamed Shawky Thabet Hassan","t":"Transmixer driver (1 class)","d":"Production"},{"n":123,"c":508,"nm":"Hossam Mohamed Esmail Rashwan","t":"Mixer operator class 1","d":"Production"},{"n":124,"c":509,"nm":"Amir Ali Ezzaldin Omar","t":"Transmixer driver (1 class)","d":"Production"},{"n":125,"c":510,"nm":"Ayoub Lotfy Abdulhamid Mohamed Ayoub","t":"Transmixer driver (1 class)","d":"Production"},{"n":126,"c":515,"nm":"Mahmoud Mohamed Mahmoud Mohamed Morsy","t":"Worker","d":"Production"},{"n":127,"c":525,"nm":"Ahmed Mohamed Ahmed Ahmed Elkady","t":"Plants Manager","d":"Production"},{"n":128,"c":527,"nm":"Jihad Ashraf Ibrahim Ghalab","t":"Office administrator","d":"Administration"},{"n":129,"c":528,"nm":"Taher Shaaban Hussein Awad","t":"Forman","d":"Production"},{"n":130,"c":529,"nm":"Hassanein Eid Hassanein Mohamed","t":"Forman","d":"Production /Precast"},{"n":131,"c":539,"nm":"Ahmed Elsayed Saber Sinjab","t":"Tires man","d":"Maintaince"},{"n":132,"c":544,"nm":"Hamed Abdel Latif Hassan Sharif","t":"Pump Oiler","d":"Production"},{"n":133,"c":546,"nm":"Mostafa Ibrahim Mohamed Abdelgany","t":"Worker","d":"Production"},{"n":134,"c":548,"nm":"Khaled Sabry Hassan Elsayed","t":"Supervisor","d":"Economic safety"},{"n":135,"c":552,"nm":"Ibrahim Hasab Elnaby Elsayed Elsheikh","t":"Fitter","d":"Production /Precast"},{"n":136,"c":555,"nm":"Reda Ahmed Abdullhady Abo Hussein","t":"Supervisor","d":"Economic safety"},{"n":137,"c":558,"nm":"Eslam Yahia Ibrahim Abdullah","t":"Driver","d":"Administration"},{"n":138,"c":561,"nm":"Ahmed Hady Mahmoud Alsaket","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":139,"c":567,"nm":"Ahmed Elsayed Mohamed Mohamed","t":"Controller","d":"Economic safety"},{"n":140,"c":573,"nm":"Khaled Nasser Mohamed Abdullhamid","t":"Fitter","d":"Production /Precast"},{"n":141,"c":574,"nm":"Ahmed Khalil Mohamed Khalil","t":"Laboratory worker","d":"QC /Laboratory"},{"n":142,"c":580,"nm":"Mohamed Saber Abdulsalam Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":143,"c":585,"nm":"Ibrahim Mohamed Mahmoud","t":"Worker","d":"Production"},{"n":144,"c":593,"nm":"Mohamed Mahmoud Abdulaal Alsayed","t":"Laborant","d":"QC /Laboratory"},{"n":145,"c":599,"nm":"Ahmed Shalabi Abu Shaisha Shalabi","t":"Security manager","d":"Economic safety"},{"n":146,"c":600,"nm":"Omar Mwafy Ahmed Gadulkariem","t":"Laborant","d":"QC /Laboratory"},{"n":147,"c":602,"nm":"Abdullrahman Ali Mohamed Farag","t":"Transmixer driver (1 class)","d":"Production"},{"n":148,"c":604,"nm":"Saied Hasany Mousa Ahmed","t":"Loader Driver","d":"Production"},{"n":149,"c":605,"nm":"Hany Shaban Hamada Mohamed","t":"Loader Driver","d":"Production"},{"n":150,"c":612,"nm":"Mohamed Nady Abdulsatar Mohamed","t":"Controller","d":"Economic safety"},{"n":151,"c":614,"nm":"Abdellah Ahmed Mohamed Mahmoud","t":"Worker","d":"Production"},{"n":152,"c":616,"nm":"Ahmed Shokry Mahmoud Abdulaal","t":"Controller","d":"Economic safety"},{"n":153,"c":618,"nm":"Mohamed Ahmed Hussein Haridy Abdullrahman","t":"Worker","d":"Production"},{"n":154,"c":619,"nm":"Osama Hefnawy Ali Mohamed","t":"Laborant","d":"QC /Laboratory"},{"n":155,"c":620,"nm":"Mahmoud Mostafa Radwan Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":156,"c":621,"nm":"Hashem Abdullnaser Ateto Ibrahim","t":"Laborant","d":"QC /Laboratory"},{"n":157,"c":622,"nm":"Ahmed Abdullrahman Abdullah Mohamed","t":"Store Keeper","d":"Stock"},{"n":158,"c":626,"nm":"Fady Fawzy Shafik Eskandr","t":"Technologs-Laborant","d":"QC /Laboratory"},{"n":159,"c":628,"nm":"Khaled Mohamed Abdulsameea Mohamed","t":"Forman","d":"Production /Precast"},{"n":160,"c":632,"nm":"Saad Gamal Abdulgawad Elsayed","t":"Controller","d":"Economic safety"},{"n":161,"c":633,"nm":"Ahmed Mohamed Mohamed Hussin","t":"Controller","d":"Economic safety"},{"n":162,"c":638,"nm":"Sobih Salim Metwaly Sopih","t":"Diesl Mechanics","d":"Maintaince"},{"n":163,"c":641,"nm":"Ahmed Mohamed Eltaher Ismaeil","t":"Loader Driver","d":"Production"},{"n":164,"c":643,"nm":"Hazem Said Mohamed Ahmed","t":"Controller","d":"Economic safety"},{"n":165,"c":644,"nm":"Mustafa Tarek Abd Elfatah","t":"Head of Stocks Group","d":"Stock"},{"n":166,"c":645,"nm":"Ahmed Hussein Rady Hussein","t":"Loader Driver","d":"Production"},{"n":167,"c":646,"nm":"Atef Ibrahem Abed Abed","t":"Transmixer driver (1 class)","d":"Production"},{"n":168,"c":647,"nm":"Abdulmoty Mohamed Abdulmoty Ahmed","t":"Worker","d":"Production"},{"n":169,"c":648,"nm":"Ibrahim Gaber Abdulfatah Ibrahim","t":"Supervisor","d":"Economic safety"},{"n":170,"c":650,"nm":"Ahmed Ramadan Abu Zaid Ramadan","t":"Driver","d":"Administration"},{"n":171,"c":655,"nm":"Mahmoud Abdulmoneem Ryad Saber","t":"Driver","d":"Administration"},{"n":172,"c":658,"nm":"Elsayed Mohamed Elsayed Hizo","t":"Driver","d":"Administration"},{"n":173,"c":659,"nm":"Mohamed Saad Yossef Ellaqany","t":"Worker","d":"Production"},{"n":174,"c":661,"nm":"Mahmoud Gamal Mohamed Alfakharani","t":"welder","d":"Maintaince"},{"n":175,"c":662,"nm":"Mohamed Ali Elnabwey Mahmoud","t":"Forman","d":"Production"},{"n":176,"c":665,"nm":"Gomaa Awad Fayez Aboshenyar","t":"Worker","d":"Production"},{"n":177,"c":666,"nm":"Olga Orlova","t":"Head of administrative department","d":"Administration"},{"n":178,"c":671,"nm":"Elsayed Mohamed Sayed Ahmed","t":"Worker","d":"Production"},{"n":179,"c":674,"nm":"Ibrahim Fawzy Ahmed Hobulah","t":"Worker","d":"Production"},{"n":180,"c":676,"nm":"Ahmed Mohamed Ibrahem Ali","t":"Worker","d":"Production"},{"n":181,"c":677,"nm":"Mostafa Refaat Mahfouz","t":"Loader Driver","d":"Production"},{"n":182,"c":680,"nm":"Ahmed Anwar Eisa Ali","t":"Loader Driver","d":"Production"},{"n":183,"c":682,"nm":"Ziad Alaa Mohamed Al Sayed Omar","t":"Excavator Operator","d":"Production"},{"n":184,"c":684,"nm":"Bishoy Suleiman Miladeh Abdo","t":"Diesl Mechanics","d":"Maintaince"},{"n":185,"c":692,"nm":"Saad Mohamed Saad Saad Abdullkawy","t":"Worker","d":"Production"},{"n":186,"c":701,"nm":"Abdul Aal Sayed Zaki Saad Aldin","t":"HSE Officer","d":"Administration"},{"n":187,"c":705,"nm":"Gomaa Jaballah Ragheb Jaballah","t":"Worker","d":"Production"},{"n":188,"c":710,"nm":"Eslam Ashraf Badr Ahmed","t":"HSE Officer","d":"Administration"},{"n":189,"c":714,"nm":"Ahmed Mohamed Mohamdy Ibrahim","t":"Worker","d":"Production"},{"n":190,"c":718,"nm":"Mostafa Metwaly Elsayed Metwaly","t":"Worker","d":"Production"},{"n":191,"c":719,"nm":"Abdullah Elshahat Basyony Abdullah","t":"Laborant","d":"QC /Laboratory"},{"n":192,"c":722,"nm":"Uliana Karelina","t":"Head of Commercial","d":"Finance"},{"n":193,"c":727,"nm":"Hussein Mohamed Hussein Haridy","t":"Worker","d":"Production"},{"n":194,"c":732,"nm":"Hamed Mohamed Ramadan Othman Farag","t":"Worker","d":"Production"},{"n":195,"c":735,"nm":"Gaber Ahmed Ali Asran","t":"Worker","d":"Production"},{"n":196,"c":736,"nm":"Emad Aldin Abdul Hadi Fathi Abdul Hadi","t":"Mechanical Engineer","d":"Maintaince"},{"n":197,"c":739,"nm":"Ahmed Kamel Mostafa Ghazy","t":"Electromechanics","d":"Maintaince"},{"n":198,"c":740,"nm":"Gamal Rezk Mousa Rezk","t":"Transmixer driver (1 class)","d":"Production"},{"n":199,"c":743,"nm":"Mostafa Ahmed Eladly Abdullrahman","t":"Store Keeper","d":"Stock /Stationary pump"},{"n":200,"c":746,"nm":"Hesham Amin Mahmoud Hemida Sloma","t":"Worker","d":"Production"},{"n":201,"c":750,"nm":"Ahmed Mahmoud Abd Elwaged Mohamed","t":"Electromechanics","d":"Maintaince"},{"n":202,"c":753,"nm":"Abdulrahman Elgohary Elsayed Maawad","t":"Commercial Admin","d":"Finance"},{"n":203,"c":755,"nm":"Ahmed Ismael Ahmed Mohamed","t":"Worker","d":"Production"},{"n":204,"c":757,"nm":"Ahmed Mohamed Abdulghafar Blal","t":"Worker","d":"Production"},{"n":205,"c":758,"nm":"Ahmed Khamis Mohamed Hussein","t":"Forman","d":"Production"},{"n":206,"c":770,"nm":"Ahmed Mohamed Gaber Fath Allah","t":"Worker","d":"Production"},{"n":207,"c":772,"nm":"Abdulmohsen Mohamed Elshamly Ahmed","t":"Driver","d":"Administration"},{"n":208,"c":782,"nm":"Abdullrahman Anany Mohamed Anany","t":"Pump Operator","d":"Production"},{"n":209,"c":783,"nm":"Mohamed Abdullah Ali Ahmed Abdullaziz","t":"Plant Mechanics","d":"Maintaince"},{"n":210,"c":784,"nm":"Mahmoud Abdullnaby Mohamed Alhety","t":"Pump Operator","d":"Production"},{"n":211,"c":788,"nm":"Mohamed Ali Abdullrahman Abdullhafiz","t":"Accountant","d":"Finance"},{"n":212,"c":789,"nm":"Khalid Hassanin Mohamed Hassanin","t":"Senior Procurement specialist","d":"Procurement"},{"n":213,"c":790,"nm":"Amin Khalid Amin Abdullhamid","t":"Senior HSE Engineer","d":"Administration"},{"n":214,"c":791,"nm":"Amr Nihad Abdullmordy Abdullfatah","t":"Senior Procurement specialist","d":"Procurement"},{"n":215,"c":792,"nm":"Nasser Abdullrazik Mohamed Awad","t":"foreman (installation)","d":"Production/Stationary pump"},{"n":216,"c":794,"nm":"Amr Elshazly Mahmoud Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":217,"c":796,"nm":"Abdullah Mohamed Mahmoud Othman","t":"Pump Operator","d":"Production/Stationary pump"},{"n":218,"c":798,"nm":"Mahmoud Sayed Abdullrady Saleh","t":"Pump Operator","d":"Production/Stationary pump"},{"n":219,"c":808,"nm":"Mohamed Saeed Sayed Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":220,"c":810,"nm":"Mohamed Zakaria Kamel Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":221,"c":815,"nm":"Ibrahim Yousef Alfouli Yousef","t":"Store Keeper","d":"Stock /Stationary pump"},{"n":222,"c":816,"nm":"Mostafa Abdul Wali Ahmed mohamed","t":"welder","d":"Maintaince/Stationary pump"},{"n":223,"c":819,"nm":"Mohamed Nazmy Abdulaziz Ismaeil","t":"Transmixer driver (1 class)","d":"Production"},{"n":224,"c":824,"nm":"Ahmed Abdulfatah Ebid Ahmed","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":225,"c":827,"nm":"Ali Mohamed Abouldoh Ahmed","t":"Controller","d":"economic safety"},{"n":226,"c":832,"nm":"Mohamed Ali Abo Alhasan Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":227,"c":833,"nm":"Ibrahim Gamal Saad Moftah","t":"Document Controller","d":"QC /Laboratory"},{"n":228,"c":836,"nm":"Yossef Mohamed Rafat Hassan","t":"Pump Operator","d":"Production/Stationary pump"},{"n":229,"c":837,"nm":"Saeid Mohamed Ahmed Elhabshy","t":"Pump Operator","d":"Production/Stationary pump"},{"n":230,"c":838,"nm":"Shaaban Abdulmawgood Morsy Ibrahim","t":"Pump Operator","d":"Production"},{"n":231,"c":839,"nm":"Abd Elhamid Abd El Kareem Mohamed Musa","t":"Transmixer driver (1 class)","d":"Production"},{"n":232,"c":843,"nm":"Mohamed Elshazly Ahmed Elsayed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":233,"c":846,"nm":"Mohamed Afify Mohamed Afify","t":"Pump Operator","d":"Production"},{"n":234,"c":847,"nm":"Mohamed Sayed Abas Mohamed Nasr","t":"Pump Operator","d":"Production"},{"n":235,"c":850,"nm":"Farag Mohamed Abdulrazek Ftyan","t":"Pump Oiler","d":"Production"},{"n":236,"c":860,"nm":"Alaa Badwy Sayed Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":237,"c":867,"nm":"Mohamed Taha Mohamed Taha","t":"Driver","d":"Administration"},{"n":238,"c":869,"nm":"Ahmed Mohamed Salman Khalaf","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":239,"c":875,"nm":"Nader Abdullsayed Mohamed Abokofa","t":"Worker","d":"Production"},{"n":240,"c":876,"nm":"Yousef Mohamed Abdullhamed Allaqany","t":"Transmixer driver (1 class)","d":"Production"},{"n":241,"c":877,"nm":"Ahmed Mohamed Reda Hassan Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":242,"c":882,"nm":"Ahmed Abd El Latif Abdo Al Ramsisi","t":"Pump Operator","d":"Production"},{"n":243,"c":885,"nm":"Abd Rabbo Mahmoud Abd Rabo Al Jaradini","t":"Laborant","d":"QC /Laboratory"},{"n":244,"c":893,"nm":"Hassan Kamel Ali Salama","t":"Loader Driver","d":"Production"},{"n":245,"c":894,"nm":"Abdullah Mohamed Mahmoud Mohamed","t":"Loader Driver","d":"Production"},{"n":246,"c":896,"nm":"Ahmed Saied Ewais Ahmed","t":"Loader Driver","d":"Production"},{"n":247,"c":897,"nm":"Sobih Ramadan Mohamed Sayed","t":"Pump Operator","d":"Production"},{"n":248,"c":898,"nm":"Mahmoud Ahmed Hassanein Abdullal","t":"Worker","d":"Production"},{"n":249,"c":903,"nm":"Ahmed Samy Mohamed Omar","t":"Laborant","d":"QC /Laboratory"},{"n":250,"c":908,"nm":"Mohamed Ahmed Elnoby Ahmed","t":"Pump Oiler","d":"Production"},{"n":251,"c":910,"nm":"Mostafa Ibrahim Mahmoud Kashasha","t":"Loader Driver","d":"Production"},{"n":252,"c":912,"nm":"Ali Mohamed Ali Mohamed Alhmeidy","t":"Loader Driver","d":"Production"},{"n":253,"c":913,"nm":"Mohamed Magdy Mohamed Kamel","t":"Loader Driver","d":"Production"},{"n":254,"c":917,"nm":"Amin Mohamed Amin Abdullmonem","t":"Worker","d":"Production"},{"n":255,"c":918,"nm":"Mahmoud Hussin Abo Zeid Gaber","t":"HSE Officer","d":"Administration"},{"n":256,"c":920,"nm":"Eslam Mahmoud Ali Elsayed","t":"Pump Operator","d":"Production"},{"n":257,"c":927,"nm":"Mostafa Ahmed Younis Salim","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":258,"c":932,"nm":"Mohamed Adel Abdulmeneem Omar","t":"Transmixer driver (1 class)","d":"Production"},{"n":259,"c":939,"nm":"Ahmed Samir Mahmoud Ali","t":"Plant Mechanics","d":"Maintaince"},{"n":260,"c":940,"nm":"Hassan Nasr Mustafa Hassan","t":"Transmixer driver (1 class)","d":"Production"},{"n":261,"c":941,"nm":"Mohamed Antar Farag Salem","t":"Transmixer driver (1 class)","d":"Production"},{"n":262,"c":944,"nm":"Abdullrahman Omar Ismail Mohamed","t":"Worker","d":"Production"},{"n":263,"c":945,"nm":"Mohamed Fayoud Ibrahim Alsayed Abdullah","t":"Laborant","d":"QC /Laboratory"},{"n":264,"c":948,"nm":"Hassan Alsayed Ali Hussein","t":"Transmixer driver (1 class)","d":"Production"},{"n":265,"c":950,"nm":"Mahrous Alsayed Mahrous Alsayed","t":"Pump Operator","d":"Production"},{"n":266,"c":952,"nm":"Younis Mostafa Abdullsalam Mohamed","t":"Laborant","d":"QC /Laboratory"},{"n":267,"c":953,"nm":"Mohamed Saad Hegazi Roby","t":"Transmixer driver (1 class)","d":"Production"},{"n":268,"c":971,"nm":"Ahmed Ibrahim Ahmed Abd El Rahman","t":"Transmixer driver (1 class)","d":"Production"},{"n":269,"c":973,"nm":"Elsayed Hussein Ali Hussein Abdulhadi","t":"Transmixer driver (1 class)","d":"Production"},{"n":270,"c":974,"nm":"Ahmed Mohamed Mohamed Abdullgalil Elshekh","t":"Worker","d":"Production"},{"n":271,"c":975,"nm":"Hussein Khalil Hassan Ali","t":"Transmixer driver (1 class)","d":"Production"},{"n":272,"c":976,"nm":"Omar Mohamed Fawzy Ali Mahmoud","t":"Worker","d":"Production"},{"n":273,"c":977,"nm":"Hazem Mohamed Hassan Mohamed","t":"Lead Accountant","d":"Finance"},{"n":274,"c":981,"nm":"Sayed Saaed Mohamed Faraag","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":275,"c":984,"nm":"Sameh Ibrahim Abdulgany Mohamed","t":"Pump Operator","d":"Production"},{"n":276,"c":986,"nm":"Ahmed Abdullah Abd El Maqsoud Junaidi","t":"Procurement specialist","d":"Procurement"},{"n":277,"c":988,"nm":"Samir Al Sayed Mohamed Ali","t":"Laborant","d":"QC /Laboratory"},{"n":278,"c":991,"nm":"Mostafa Abdulsalam Meatemd Abdulrahman","t":"Excavator Operator","d":"Production"},{"n":279,"c":995,"nm":"Mohamed Samer Abdul Mohsen Saad","t":"Production Engineer","d":"Planning"},{"n":280,"c":999,"nm":"Ahmed Ali Mostafa Mohamed","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":281,"c":1000,"nm":"Denis Ezhov","t":"Head of Planning","d":"Planning"},{"n":282,"c":1001,"nm":"Karim Abdullah Mohamed Hanafi","t":"HR Coordinator","d":"Administration"},{"n":283,"c":1002,"nm":"Khaled ahmed abdulhay osman","t":"Planning Section Head","d":"Planning"},{"n":284,"c":1004,"nm":"mohamed khalifa mohamed metwaly","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":285,"c":1005,"nm":"Karim Sayed Snosy Abdel Basit","t":"Maintenance Engineer","d":"Production/Stationary pump"},{"n":286,"c":1006,"nm":"Moaid Kamal Ibrahim Al Gak","t":"Electrical Engineer","d":"Maintaince"},{"n":287,"c":1008,"nm":"Saleh Mohamed Saleh Ragab Eldabae","t":"Worker","d":"Production"},{"n":288,"c":1009,"nm":"Mahmoud Elsayed Khalifa Ahmed","t":"QC Engineer","d":"QC /Laboratory"},{"n":289,"c":1011,"nm":"Mohamed Abdelfattah Ahmed Hussien Shehata","t":"HR Coordinator","d":"Administration"},{"n":290,"c":1013,"nm":"Sara Nasr Mahmoud Ali","t":"HR Coordinator","d":"Administration"},{"n":291,"c":1017,"nm":"Medhat Nabeh Saad Aly Abosohil","t":"Pump Operator","d":"Production/Stationary pump"},{"n":292,"c":1023,"nm":"Ibrahim Mohamed Hanafy Mohamed","t":"Pump Oiler","d":"Production"},{"n":293,"c":1027,"nm":"Mohamed Ramadan Elsayed Mohamed","t":"stock assistant","d":"Stock"},{"n":294,"c":1032,"nm":"Reda Gomaa Elsayed Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":295,"c":1033,"nm":"Youseef Shaban Esmail Abo bakr","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":296,"c":1041,"nm":"Obayd Badry Obayd Mohamed","t":"Worker","d":"Production"},{"n":297,"c":1042,"nm":"Mohamed Kamel Helmy Mohamed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":298,"c":1047,"nm":"Ali Mostafa Ali Elhosseny","t":"Pump Operator","d":"Production/Stationary pump"},{"n":299,"c":1048,"nm":"Montaser Abdulla Mohamed Abo Elgheit","t":"Pump Operator","d":"Production"},{"n":300,"c":1056,"nm":"Ahmed Hamdy Mohamed Ahmed","t":"Electrical \u0026 plc control","d":"Maintaince"},{"n":301,"c":1058,"nm":"Ahmed Yehya Zakaria Eltanekhy","t":"Transmixer driver (1 class)","d":"Production"},{"n":302,"c":1059,"nm":"Mohamed Abo Zeid Mahmoud Ibrahim Abo Zaid","t":"Pump Oiler","d":"Production"},{"n":303,"c":1060,"nm":"Hany Amen Sayed Ali Zein","t":"Transmixer driver (1 class)","d":"Production"},{"n":304,"c":1061,"nm":"Mahmoud Abdullah Mohamed Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":305,"c":1063,"nm":"Abuelkaseem Abdulraouf Hussien","t":"Transmixer driver (1 class)","d":"Production"},{"n":306,"c":1065,"nm":"Adel Mohamed Abdelmohsin Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":307,"c":1066,"nm":"Ibrahim Khaled Saad Hamed","t":"Worker","d":"Production"},{"n":308,"c":1072,"nm":"Hassan Ibrahim Abdelmgeed Abaas","t":"Tires man","d":"Maintaince"},{"n":309,"c":1078,"nm":"Abdelrahman Mohamed Shaban","t":"Pump Oiler","d":"Production"},{"n":310,"c":1084,"nm":"Hamdy Saber Nwegie Awad","t":"Worker 5%","d":"Administration"},{"n":311,"c":1086,"nm":"Abdelsamad Mohamed Abdelhaliem Mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":312,"c":1087,"nm":"Aboulkomsan nagar mahmoud abdulaziz","t":"Worker","d":"Production"},{"n":313,"c":1090,"nm":"Mohamed Ahmed Abdelreheem Ali Edrees","t":"Procurement specialist","d":"Procurement"},{"n":314,"c":1091,"nm":"Mahmoud Mohamed Ahmed Mahmoud","t":"Mixer operator class 1","d":"Production"},{"n":315,"c":1098,"nm":"Aly Mohamed Abdelmgeed Mahmoud","t":"Transmixer driver (1 class)","d":"Production"},{"n":316,"c":1107,"nm":"Mohamed Ahmed Mostafa Hassan","t":"Pump Oiler","d":"Production"},{"n":317,"c":1109,"nm":"Mahmoud Abdelhafez Abdelhameed","t":"Transmixer driver (1 class)","d":"Production"},{"n":318,"c":1111,"nm":"Mahmoud Ibrahim Elsayed Ibrahim","t":"Pump Oiler","d":"Production"},{"n":319,"c":1112,"nm":"Ahmed Mouhsen Makmoud El Azab","t":"Pump Operator","d":"Production"},{"n":320,"c":1114,"nm":"Mohamed Ali Eid Abdeltawab","t":"Plant Mechanics","d":"Maintaince"},{"n":321,"c":1117,"nm":"Mohamed Farag Abdelgawad Elsayed","t":"Controller","d":"Economic safety"},{"n":322,"c":1121,"nm":"Mohamed Shahat Mahmoud Khaleil","t":"Pump Oiler","d":"Production"},{"n":323,"c":1126,"nm":"Anna Lenskaia","t":"Finance Manager","d":"Finance"},{"n":324,"c":1128,"nm":"Adel Ramadan Abas Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":325,"c":1129,"nm":"Mahmoud Ateto Gadelkareem Eltayeb","t":"Transmixer driver (1 class)","d":"Production"},{"n":326,"c":1131,"nm":"Abdelrahman Ahmed Youness Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":327,"c":1133,"nm":"Youseef Abdelhady Abdellatef Lotfy","t":"Chief Engineer","d":"Planning"},{"n":328,"c":1140,"nm":"Kamal ahmed kamal elsayed mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":329,"c":1143,"nm":"Mohamed Hassan Mohamed Abdelwahab","t":"Pump Oiler","d":"Production"},{"n":330,"c":1147,"nm":"Mahmoud Saleh Mohamed Kamal","t":"Loader Driver","d":"Production"},{"n":331,"c":1148,"nm":"Ahmed Ali Abdelazim Ali Ibrahim","t":"Weighbridge operators","d":"Stock"},{"n":332,"c":1152,"nm":"Mohamed Nabil Mohamed Khayry","t":"Procurement Head","d":"Procurement"},{"n":333,"c":1153,"nm":"Ali Ahmed Ali Ahmed","t":"Worker","d":"Production"},{"n":334,"c":1154,"nm":"Abdelmged Ismail Abdelmged Ahmed","t":"Transmixer driver (1 class)","d":"Production"},{"n":335,"c":1159,"nm":"Mohamed Kamal Abdelghafar Hasan","t":"Plant Mechanics","d":"Maintaince"},{"n":336,"c":1161,"nm":"Ayman Ragab Ghazaly Ahmed","t":"Transmixer driver (1 class)","d":"Production"},{"n":337,"c":1163,"nm":"Mahmoud Gamal Mahmoud Gadalkareem","t":"welder","d":"Maintaince/Stationary pump"},{"n":338,"c":1164,"nm":"Ayman Abdelnaby Hussien Hassan","t":"Transmixer driver (1 class)","d":"Production"},{"n":339,"c":1167,"nm":"Ahmed Abdelmged Ahmed Taman","t":"Transmixer driver (1 class)","d":"Production"},{"n":340,"c":1172,"nm":"Gaber Mostafa Gaber Mohamed Ali","t":"Transmixer driver (1 class)","d":"Production"},{"n":341,"c":1173,"nm":"Mohamed Amr Abdelwahab","t":"Planning Engineer","d":"Planning"},{"n":342,"c":1177,"nm":"Mohamed Mohamed Ismail Taman","t":"Transmixer driver (1 class)","d":"Production"},{"n":343,"c":1178,"nm":"Hatem Abdelkader Ismail Saleh","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":344,"c":1179,"nm":"Hassan Said Ahmed Reda","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":345,"c":1180,"nm":"Mostafa Abdelmawgod Mostafa Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":346,"c":1181,"nm":"Sayed Mohamed Mostafa","t":"Transmixer driver (1 class)","d":"Production"},{"n":347,"c":1183,"nm":"Abdelrahman Mahmoud Abas Hassan Mahmoud","t":"environmental engineer","d":"administration"},{"n":348,"c":1184,"nm":"Mostafa Hassan Hassan Moghazy","t":"Pump Oiler","d":"Production"},{"n":349,"c":1186,"nm":"Abdullah Ahmed Reda Saleh","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":350,"c":1187,"nm":"omaier Esmat Abdo Ellakany","t":"Pump Operator","d":"Production"},{"n":351,"c":1189,"nm":"Talaea Kamel Darwesh Kamel","t":"HSE Engineer","d":"administration"},{"n":352,"c":1190,"nm":"Mohamed Nazeh Abdelgelel Hamed","t":"Planning Engineer","d":"Planning"},{"n":353,"c":1192,"nm":"Emad Mahmoud Abdelaty Shehata","t":"Pump Operator","d":"Production/Stationary pump"},{"n":354,"c":1194,"nm":"Mouhab Magdy Saad Kotb Mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":355,"c":1198,"nm":"Mahmoud Ibrahim Gad Mohamed","t":"Transmixer driver (1 class)","d":"Production"},{"n":356,"c":1202,"nm":"Adel Attaallah Saady Saber","t":"Assembler (pipeline installation )","d":"Production/Stationary pump"},{"n":357,"c":1206,"nm":"Taha Amr Taha Mohamed Ahmed","t":"Pump Operator","d":"Production/Stationary pump"},{"n":358,"c":1209,"nm":"Karim Abd elMoati Ali Abd ElMoati","t":"Electrical \u0026 plc control","d":"Maintaince"},{"n":359,"c":1210,"nm":"Ahmed Mohamed Abdallah Mahmoud","t":"Stock assistant","d":"Stock"},{"n":360,"c":1212,"nm":"Mohamed elsayed Mahmoud Dawoud","t":"Transmixer driver (1 class)","d":"Production"},{"n":361,"c":1217,"nm":"Ahmed Esam Mohamed Abdelmotagali","t":"Store Worker","d":"Stock"},{"n":362,"c":1219,"nm":"Moamen Ali Amin Amin","t":"HSE Engineer","d":"administration"},{"n":363,"c":1220,"nm":"Adham Elsayed Mostafa Elsayed","t":"HSE Engineer","d":"administration"},{"n":364,"c":1221,"nm":"Rustam Iaushev","t":"Metrolegest","d":"QC /Laboratory"},{"n":365,"c":1223,"nm":"Mahmoud Khaled Mahmoud Mohamed","t":"Treasury specialist","d":"Finance"},{"n":366,"c":1224,"nm":"Tatiana chalenka","t":"Head of Commercial","d":"Finance"},{"n":367,"c":1225,"nm":"Ahmed ramadan abdrabo mohamed","t":"QC Engineer","d":"QC /Laboratory"},{"n":368,"c":1226,"nm":"Mousa Moftah Saad Emdeda","t":"Worker 5%","d":"Administration"},{"n":369,"c":1227,"nm":"Mohamed Elsayed Abdelhameid Elsayed","t":"Deputy of Chief Accountant","d":"Finance"},{"n":370,"c":1228,"nm":"Ebeed Amin Omar Mohamed Lebza","t":"HSE Officer","d":"Administration"},{"n":371,"c":1229,"nm":"Mohamed Ali Fathy Ali","t":"Laborant","d":"QC /Laboratory"},{"n":372,"c":1230,"nm":"Hisham Mohamed Ali Mohamed","t":"Deputy of Chief Accountant","d":"Finance"},{"n":373,"c":1231,"nm":"Heba Tarek Housein Nageeb","t":"Office administrator","d":"Administration"},{"n":374,"c":1232,"nm":"Eid Ayoub Mohamed Mohamed Gad Elgamal","t":"Store Worker","d":"Stock"},{"n":375,"c":1233,"nm":"Mahmoud abdulmenem goda farag","t":"Pump Oiler","d":"Production"},{"n":376,"c":1235,"nm":"Ibrahim Mahmoud Mohamed Abdelsamad","t":"Laboratory worker","d":"QC /Laboratory"},{"n":377,"c":1236,"nm":"Mohamed Wageh Masoud Mohamed","t":"Laboratory worker","d":"QC /Laboratory"},{"n":378,"c":1237,"nm":"Hamed Kamal ali Ismail","t":"QC Engineer","d":"QC /Laboratory"},{"n":379,"c":1238,"nm":"Mahmoud Ahmed Mohamed Abdelaal","t":"Weighbridge operators","d":"Stock"},{"n":380,"c":1239,"nm":"Ehab Tawfek ouraby anwer","t":"Worker","d":"Production"},{"n":381,"c":1240,"nm":"Ibrahim Nabil Ibrahim Elsaber","t":"Laboratory worker","d":"QC /Laboratory"},{"n":382,"c":1241,"nm":"Mahmoud Ibrahim Abdelmageed Khalil","t":"HSE Engineer","d":"administration"},{"n":383,"c":1242,"nm":"Anter Adel Elsayed Hassan","t":"Worker","d":"Production"}],"dw":[{"n":1,"c":1239,"nm":"Ehab Tawfek ouraby anwer","p":"LIBHEER 1"},{"n":2,"c":1041,"nm":"Obayd Badry Obayd Mohamed","p":""},{"n":3,"c":57,"nm":"Abdulshafia Ahmed Sakr Gafar","p":""},{"n":4,"c":692,"nm":"Saad Mohamed Saad Saad Abdullkawy","p":""},{"n":5,"c":1087,"nm":"Aboulkomsan nagar mahmoud abdulaziz","p":"LIBHEER 2"},{"n":6,"c":618,"nm":"Mohamed Ahmed Hussein Haridy Abdullrahman","p":""},{"n":7,"c":735,"nm":"Gaber Ahmed Ali Asran","p":""},{"n":8,"c":515,"nm":"Mahmoud Mohamed Mahmoud Mohamed Morsy","p":""},{"n":9,"c":898,"nm":"Mahmoud Ahmed Hassanein Abdullal","p":"VURMAK 3"},{"n":10,"c":647,"nm":"Abdulmoty Mohamed Abdulmoty Ahmed","p":""},{"n":11,"c":692,"nm":"Saad Mohamed Saad Saad Abdullkawy","p":""},{"n":12,"c":757,"nm":"Ahmed Mohamed Abdulghafar Blal","p":""},{"n":13,"c":671,"nm":"Elsayed Mohamed Sayed Ahmed","p":"VURMAK 4"},{"n":14,"c":356,"nm":"Mostafa Salah Moslem Atia","p":""},{"n":15,"c":447,"nm":"Bassem Mohamed Ali Abdulhamed Hassan","p":""},{"n":16,"c":465,"nm":"Robin Sami  Karmy Ajban","p":""},{"n":17,"c":974,"nm":"Ahmed Mohamed Mohamed Abdullgalil Elshekh","p":"TRUCK SHEET"},{"n":18,"c":674,"nm":"Ibrahim Fawzy Ahmed Hobulah","p":""},{"n":19,"c":746,"nm":"Hesham Amin Mahmoud Hemida Sloma","p":""},{"n":20,"c":714,"nm":"Ahmed Mohamed Mohamdy Ibrahim","p":"ACT"},{"n":21,"c":439,"nm":"Islam Shahat Mohamed","p":"GROUND TANK"},{"n":22,"c":203,"nm":"Ahmed Abdulmoneem Elsayed Mohamed","p":""},{"n":23,"c":732,"nm":"Hamed Mohamed Ramadan Othman Farag","p":""},{"n":24,"c":19,"nm":"Eslam Mohamed Gabr Mohamed","p":"OFFICE BOY"},{"n":25,"c":770,"nm":"Ahmed Mohamed Gaber Fath Allah","p":""},{"n":26,"c":755,"nm":"Ahmed Ismael Ahmed Mohamed","p":""}],"nw":[{"n":1,"c":917,"nm":"Amin Mohamed Amin Abdullmonem","p":"LIBHEER 1"},{"n":2,"c":265,"nm":"Ahmed Mohamed Mahmoud Hassan","p":""},{"n":3,"c":718,"nm":"Moustafa Metwaly Elsayed Metwaly","p":""},{"n":4,"c":1066,"nm":"Ibrahim Khaled Saad Hamed","p":""},{"n":5,"c":614,"nm":"Abdellah Ahmed Mohamed Mahmoud","p":"LIBHEER 2"},{"n":6,"c":875,"nm":"Nader Abdullsayed Mohamed Abokofa","p":""},{"n":7,"c":259,"nm":"Abdelrahman Hagag Khireshy Abdelmonem","p":""},{"n":8,"c":705,"nm":"Gomaa Jaballah Ragheb Jaballah","p":"VURMAK 3"},{"n":9,"c":546,"nm":"Mostafa Ibrahim Mohamed Abdelgany","p":""},{"n":10,"c":976,"nm":"Omar Mohamed Fawzy Ali Mahmoud","p":""},{"n":11,"c":665,"nm":"Gomaa Awad Fayez Aboshenyar","p":"VURMAK 4"},{"n":12,"c":1153,"nm":"Ali Ahmed Ali Ahmed","p":""},{"n":13,"c":676,"nm":"Ahmed Mohamed Ibrahem Ali","p":""},{"n":14,"c":585,"nm":"Ibrahim Mohamed Mahmoud","p":"HOUSE KEEPING"},{"n":15,"c":727,"nm":"Hussein Mohamed Hussein Haridy","p":""},{"n":16,"c":944,"nm":"Abdullrahman Omar Ismail Mohamed","p":""},{"n":17,"c":1242,"nm":"Anter Adel Elsayed Hassan","p":""},{"n":18,"c":1008,"nm":"Saleh Mohamed Saleh Ragab Eldabae","p":"ACCIDENT"}],"sm":[],"ph":[]};
 
-// ── DEPT COLORS ──────────────────────────────────────────────
-const DEPT_CLS = {
-  'production':'d-prod','maintaince':'d-maint','maintenance':'d-maint',
-  'qc /laboratory':'d-qc','qc/laboratory':'d-qc',
-  'administration':'d-adm','planning':'d-plan',
-  'finance':'d-fin','stock':'d-stock',
-  'economic safety':'d-eco','procurement':'d-proc',
-  'production/stationary pump':'d-st-pump',
-  'production /precast':'d-prod'
+const DEPTS = {
+  "Production":{c:"#2563eb"}, "Production / stationary pump":{c:"#0891b2",s:"Stationary pump"},
+  "Production / precast":{c:"#7c3aed",s:"Precast"}, "QC / laboratory":{c:"#d97706",s:"QC / Lab"},
+  "Administration":{c:"#db2777"}, "Maintenance":{c:"#059669"}, "Maintenance / stationary pump":{c:"#10b981",s:"Maint. / Stat. pump"},
+  "Economic safety":{c:"#dc2626",s:"Economic safety"}, "Stock":{c:"#65a30d"}, "Stock / stationary pump":{c:"#84cc16",s:"Stock / Stat. pump"},
+  "Finance":{c:"#9333ea"}, "Planning":{c:"#0d9488"}, "Procurement":{c:"#ea580c"}
 };
-function deptCls(d){ const k=(d||'').toLowerCase().replace(/\s*\/\s*/g,'/').trim(); return DEPT_CLS[k] || (k.includes('stationary')?'d-st-pump':k.startsWith('maint')?'d-maint':k.startsWith('stock')?'d-stock':'d-adm'); }
-function deptLabel(d){ return (d||'').replace('Production / stationary pump','Stat. Pump').replace('Production / precast','Precast').replace('Maintaince / stationary pump','Maint. / Stat. Pump').replace('Stock / stationary pump','Stock / Stat. Pump').replace('QC / laboratory','QC / Lab').replace('Maintaince','Maintenance').replace('Economic safety','Eco Safety'); }
+const clean = s => String(s||'').replace(/\s+/g,' ').trim();
+const title = s => clean(s).toLowerCase().replace(/(^|[\s(/-])([a-z])/g,(m,a,b)=>a+b.toUpperCase());
+function normDept(d){
+  d = clean(d).replace(/\s*\/\s*/g,' / ').toLowerCase();
+  d = d.charAt(0).toUpperCase()+d.slice(1);
+  return d.replace(/^Qc/,'QC').replace('Maintaince','Maintenance');
+}
+function normTitle(t){
+  t = clean(t).replace(/\(\s*/g,'(').replace(/\s*\)/g,')');
+  t = t.replace(/^Forman$/i,'Foreman').replace(/Diesl/i,'Diesel').replace(/Metrolegest/i,'Metrologist').replace(/Technologs-Laborant/i,'Technologist / Laborant');
+  return t.charAt(0).toUpperCase()+t.slice(1);
+}
+const STAFF = RAW.fl.map(r=>({c:r.c, n:title(r.nm), t:normTitle(r.t), d:normDept(r.d)}));
+const label = d => (DEPTS[d]&&DEPTS[d].s)||d;
+const color = d => (DEPTS[d]&&DEPTS[d].c)||'#64748b';
+const initials = n => n.split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function hl(text,q){ const s=esc(text); if(!q) return s; const i=text.toLowerCase().indexOf(q); if(i<0) return s; return esc(text.slice(0,i))+'<mark>'+esc(text.slice(i,i+q.length))+'</mark>'+esc(text.slice(i+q.length)); }
+function avatar(n,d){ const c=color(d); return `<div class="av" style="background:${c}1f;color:${c}">${initials(n)}</div>`; }
 
-// ── STATS ─────────────────────────────────────────────────────
-function buildStats(){
-  const fl = DATA.fl||[];
-  const depts = {};
-  fl.forEach(r=>{ const k=(r.d||'').trim(); depts[k]=(depts[k]||0)+1; });
-  const prod = (depts['Production']||0)+(depts['Production / stationary pump']||0)+(depts['Production / precast']||0);
-  const stats=[
-    {v:fl.length,l:'Total Staff'},
-    {v:prod,l:'Production'},
-    {v:depts['QC / laboratory']||0,l:'QC / Lab'},
-    {v:(depts['Maintaince']||0)+(depts['Maintaince / stationary pump']||0),l:'Maintenance'},
-    {v:depts['Administration']||0,l:'Admin'},
-    {v:(depts['Finance']||0),l:'Finance'}
-  ];
-  document.getElementById('statsRow').innerHTML=stats.map(s=>
-    `<div class="stat-card"><div class="val">${s.v}</div><div class="lbl">${s.l}</div></div>`
-  ).join('');
-}
+function fill(arr){ let last=''; return arr.map(r=>{ if(clean(r.p)) last=title(r.p).replace('Libheer','Liebherr').replace('Act','ACT'); return {c:r.c,n:title(r.nm),p:last}; }); }
+const DAY = fill(RAW.dw), NIGHT = fill(RAW.nw);
 
-// ── DEPT FILTER CHIPS ─────────────────────────────────────────
-let activeDept = 'All';
-function buildDeptFilters(){
-  const fl = DATA.fl||[];
-  const depts = ['All'];
-  fl.forEach(r=>{ const d=(r.d||'').trim(); if(d && !depts.includes(d)) depts.push(d); });
-  depts.sort((a,b)=>a==='All'?-1:b==='All'?1:a.localeCompare(b));
-  const el=document.getElementById('deptFilters');
-  el.innerHTML=depts.map((d,i)=>
-    `<div class="fchip${i===0?' active':''}" onclick="setDept('${d.replace(/'/g,"\\'")}',this)">${deptLabel(d)}</div>`
-  ).join('');
-}
-function setDept(d,el){
-  activeDept=d;
-  document.querySelectorAll('#deptFilters .fchip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  filterAll();
-}
+const byDept = {}; STAFF.forEach(s=>{(byDept[s.d]=byDept[s.d]||[]).push(s)});
+const deptOrder = Object.keys(byDept).sort((a,b)=>byDept[b].length-byDept[a].length);
+const prodTotal = deptOrder.filter(d=>d.startsWith('Production')).reduce((a,d)=>a+byDept[d].length,0);
 
-// ── ALL STAFF TABLE ───────────────────────────────────────────
-function filterAll(){
-  const q=(document.getElementById('srchAll').value||'').toLowerCase();
-  const fl=(DATA.fl||[]);
-  const rows=fl.filter(r=>{
-    if(activeDept!=='All' && (r.d||'').trim()!==activeDept) return false;
-    if(!q) return true;
-    return (r.nm||'').toLowerCase().includes(q)||(String(r.c||'')).includes(q)||(r.t||'').toLowerCase().includes(q);
-  });
-  const tbody=document.getElementById('allBody');
-  if(rows.length===0){
-    tbody.innerHTML='';
-    document.getElementById('allEmpty').style.display='block';
-  } else {
-    document.getElementById('allEmpty').style.display='none';
-    tbody.innerHTML=rows.map((r,i)=>`<tr>
-      <td>${i+1}</td>
-      <td><span class="code-badge">${r.c||''}</span></td>
-      <td class="name-cell">${esc(r.nm||'')}</td>
-      <td class="title-cell">${esc(r.t||'')}</td>
-      <td><span class="dept-badge ${deptCls(r.d)}">${deptLabel(r.d||'')}</span></td>
-    </tr>`).join('');
-  }
-}
+// KPIs
+const ico = {
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  factory:'<path d="M2 20h20M4 20V10l6 4V10l6 4V4h4v16"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
+};
+const svg = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+document.getElementById('kpis').innerHTML = [
+  {l:'Total staff', v:STAFF.length, s:`${deptOrder.length} departments`, i:'users', c:'#1d4a85'},
+  {l:'Production', v:prodTotal, s:`${Math.round(prodTotal/STAFF.length*100)}% of staff`, i:'factory', c:'#2563eb'},
+  {l:'Day workers', v:DAY.length, s:'Day shift', i:'sun', c:'#e8833a'},
+  {l:'Night workers', v:NIGHT.length, s:'Night shift', i:'moon', c:'#5b4bc4'}
+].map(k=>`<div class="kpi"><div class="k-top"><span class="k-label">${k.l}</span><span class="k-ico" style="background:${k.c}1a;color:${k.c}">${svg(ico[k.i])}</span></div><div class="k-val">${k.v}</div><div class="k-sub">${k.s}</div></div>`).join('');
 
-// ── WORKERS ───────────────────────────────────────────────────
-function buildWorkers(){
-  const dw=DATA.dw||[], nw=DATA.nw||[];
-  document.getElementById('dayCnt').textContent=dw.length;
-  document.getElementById('ngtCnt').textContent=nw.length;
-  renderShift('dayBody',dw);
-  renderShift('ngtBody',nw);
+// Staff view
+let dept='All', q='', limit=60;
+function chips(){
+  const all=[['All',STAFF.length]].concat(deptOrder.map(d=>[d,byDept[d].length]));
+  document.getElementById('chips').innerHTML = all.map(([d,n])=>`<button class="chip${d===dept?' on':''}" data-d="${esc(d)}">${d==='All'?'':`<i style="background:${color(d)}"></i>`}${esc(d==='All'?'All':label(d))} <b>${n}</b></button>`).join('');
 }
-function renderShift(id, data){
-  document.getElementById(id).innerHTML=data.map(r=>`<tr>
-    <td>${r.n}</td>
-    <td><span class="code-badge">${r.c||''}</span></td>
-    <td class="name-cell">${esc(r.nm||'')}</td>
-    <td>${r.p?`<span class="plant-tag">${esc(r.p)}</span>`:''}</td>
-  </tr>`).join('');
+function renderStaff(){
+  const rows = STAFF.filter(s=>(dept==='All'||s.d===dept) && (!q || s.n.toLowerCase().includes(q) || String(s.c).includes(q) || s.t.toLowerCase().includes(q)));
+  document.getElementById('meta').textContent = `${rows.length} ${rows.length===1?'person':'people'}${dept!=='All'?' in '+label(dept):''}${q?` matching "${q}"`:''}`;
+  const shown = rows.slice(0,limit);
+  document.getElementById('list').innerHTML = shown.length ? shown.map(s=>`
+    <div class="card">${avatar(s.n,s.d)}
+      <div class="body"><div class="nm">${hl(s.n,q)}</div><div class="tt">${hl(s.t,q)}</div>
+      <div class="dp"><i style="background:${color(s.d)}"></i>${esc(label(s.d))}</div></div>
+      <div class="code">${hl(String(s.c),q)}</div>
+    </div>`).join('') : '<div class="empty">No one matches this search.</div>';
+  const more=document.getElementById('more'); more.hidden = rows.length<=limit; more.textContent=`Show all ${rows.length}`;
 }
-function filterWorkers(){
-  const q=(document.getElementById('srchWrk').value||'').toLowerCase();
-  if(!q){ buildWorkers(); return; }
-  function fil(arr){ return arr.filter(r=>(r.nm||'').toLowerCase().includes(q)||String(r.c||'').includes(q)); }
-  const dw=fil(DATA.dw||[]), nw=fil(DATA.nw||[]);
-  document.getElementById('dayCnt').textContent=dw.length;
-  document.getElementById('ngtCnt').textContent=nw.length;
-  renderShift('dayBody',dw); renderShift('ngtBody',nw);
-}
+document.getElementById('chips').addEventListener('click',e=>{const b=e.target.closest('.chip'); if(!b) return; dept=b.dataset.d; limit=60; chips(); renderStaff();});
+document.getElementById('more').addEventListener('click',()=>{limit=1e4; renderStaff();});
 
-// ── SUMMARY ───────────────────────────────────────────────────
-function buildSummary(){
-  const fl=DATA.fl||[];
-  const byDept={};
-  fl.forEach(r=>{
-    const d=(r.d||'Other').trim();
-    if(!byDept[d]) byDept[d]={};
-    const t=(r.t||'Unknown').trim();
-    byDept[d][t]=(byDept[d][t]||0)+1;
-  });
-  const depts=Object.keys(byDept).sort();
-  let html='';
-  depts.forEach(dept=>{
-    const titles=byDept[dept];
-    const total=Object.values(titles).reduce((a,b)=>a+b,0);
-    html+=`<div class="sum-dept-title"><span class="dept-badge ${deptCls(dept)}">${deptLabel(dept)}</span> <span class="count-tag">${total} staff</span></div>`;
-    Object.keys(titles).sort().forEach(title=>{
-      html+=`<div class="sum-row"><span>${esc(title)}</span><span class="sum-count">${titles[title]}</span></div>`;
-    });
-  });
-  document.getElementById('sumContent').innerHTML=html;
+// Departments view
+function renderDepts(){
+  const max = byDept[deptOrder[0]].length;
+  document.getElementById('bars').innerHTML = deptOrder.map(d=>{const n=byDept[d].length; return `
+    <button class="bar" data-d="${esc(d)}"><div class="row"><span>${esc(label(d))}</span><em><strong>${n}</strong> &middot; ${(n/STAFF.length*100).toFixed(1)}%</em></div>
+    <div class="track"><div style="width:${n/max*100}%;background:${color(d)}"></div></div></button>`}).join('');
+  document.getElementById('roles').innerHTML = deptOrder.map(d=>{
+    const t={}; byDept[d].forEach(s=>t[s.t]=(t[s.t]||0)+1);
+    const list=Object.entries(t).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="role"><span>${esc(k)}</span><b>${v}</b></div>`).join('');
+    return `<details class="roles"><summary><span><span style="color:${color(d)}">&#9679;</span> ${esc(label(d))} <span style="color:var(--ink-3);font-weight:500">&middot; ${byDept[d].length}</span></span></summary>${list}</details>`;
+  }).join('');
+}
+document.getElementById('bars').addEventListener('click',e=>{const b=e.target.closest('.bar'); if(!b) return; dept=b.dataset.d; limit=60; show('staff'); chips(); renderStaff(); window.scrollTo({top:document.querySelector('.nav').offsetTop,behavior:'smooth'});});
+
+// Workers view
+function renderWorkers(){
+  const block=(name,sub,list,c,soft,icon)=>{
+    const f=list.filter(w=>!q||w.n.toLowerCase().includes(q)||String(w.c).includes(q)||w.p.toLowerCase().includes(q));
+    const groups=[]; f.forEach(w=>{let g=groups.find(x=>x.p===w.p); if(!g){g={p:w.p,items:[]};groups.push(g);} g.items.push(w);});
+    return `<div class="shift"><div class="shift-h" style="background:${soft}"><div class="si" style="background:${c};color:#fff">${svg(ico[icon])}</div>
+      <div><h3>${name}</h3><p>${sub}</p></div><div class="cnt" style="color:${c}">${f.length}</div></div>
+      ${groups.map(g=>`<div class="grp"><div class="grp-t"><span>${esc(g.p||'Unassigned')}</span><span>${g.items.length}</span></div>
+        ${g.items.map(w=>`<div class="w"><div class="av" style="background:${c}1f;color:${c}">${initials(w.n)}</div><div class="nm">${hl(w.n,q)}</div><div class="code">${hl(String(w.c),q)}</div></div>`).join('')}</div>`).join('') || '<div class="empty">No match</div>'}
+    </div>`;
+  };
+  document.getElementById('shifts').innerHTML = block('Day shift','Grouped by plant and role',DAY,'#e8833a','var(--day-soft)','sun') + block('Night shift','Grouped by plant and role',NIGHT,'#5b4bc4','var(--night-soft)','moon');
 }
 
-// ── TAB SWITCHING ─────────────────────────────────────────────
-function showTab(name, el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('sec-'+name).classList.add('active');
-}
+// nav + search
+function show(v){ document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v)); document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v)); }
+document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button'); if(b) show(b.dataset.v);});
+const qi=document.getElementById('q'), clr=document.getElementById('clr');
+qi.addEventListener('input',()=>{ q=qi.value.trim().toLowerCase(); clr.classList.toggle('show',!!q); limit=60; renderStaff(); renderWorkers(); if(q && document.getElementById('v-depts').classList.contains('on')) show('staff'); });
+clr.addEventListener('click',()=>{ qi.value=''; qi.dispatchEvent(new Event('input')); qi.focus(); });
 
-// ── UTILS ─────────────────────────────────────────────────────
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// ── INIT ─────────────────────────────────────────────────────
-(DATA.fl||[]).forEach(r=>{const d=(r.d||'').trim().replace(/\s*\/\s*/g,' / ');r.d=(d.charAt(0).toUpperCase()+d.slice(1).toLowerCase()).replace(/^Qc/,'QC');});
-buildStats();
-buildDeptFilters();
-filterAll();
-buildWorkers();
-buildSummary();
+chips(); renderStaff(); renderDepts(); renderWorkers();
 </script>
 </body>
 </html>
-
