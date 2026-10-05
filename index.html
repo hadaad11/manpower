@@ -408,6 +408,15 @@ qi.addEventListener('input',()=>{ q=qi.value.trim().toLowerCase(); clr.classList
 clr.addEventListener('click',()=>{ qi.value=''; qi.dispatchEvent(new Event('input')); qi.focus(); });
 
 chips(); titleOpts(); renderStaff(); renderDepts(); renderWorkers(); renderLeft();
+
+// Phones may keep a cached copy for 10 minutes; reload once when the server has a newer version.
+(async()=>{ try{
+  const u=location.pathname;
+  const [a,b]=await Promise.all([fetch(u,{cache:'force-cache'}),fetch(u,{cache:'no-store'})]);
+  const ea=a.headers.get('etag'), eb=b.headers.get('etag');
+  let seen=null; try{ seen=sessionStorage.getItem('mp-reload'); }catch(e){}
+  if(ea && eb && ea!==eb && seen!==eb){ try{ sessionStorage.setItem('mp-reload',eb); }catch(e){} location.replace(u+'?v='+Date.now()); }
+}catch(e){} })();
 </script>
 </body>
 </html>
