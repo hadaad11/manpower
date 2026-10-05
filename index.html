@@ -280,8 +280,14 @@ function chips(){
   document.getElementById('chips').innerHTML = all.map(([d,n])=>`<button class="chip${d===dept?' on':''}" data-d="${esc(d)}">${d==='All'?'':`<i style="background:${color(d)}"></i>`}${esc(d==='All'?'All':label(d))} <b>${n}</b></button>`).join('');
 }
 function renderStaff(){
-  const rows = STAFF.filter(s=>(dept==='All'||s.d===dept) && (jt==='All'||s.t===jt) && (!q || s.n.toLowerCase().includes(q) || String(s.c).includes(q) || s.t.toLowerCase().includes(q)));
-  document.getElementById('meta').innerHTML = esc(`${rows.length} ${rows.length===1?'person':'people'}${jt!=='All'?' · '+jt:''}${dept!=='All'?' in '+label(dept):''}${q?` matching "${q}"`:''}`) + (jt!=='All'?'<button class="jt-clear" id="jtClear">Clear job filter</button>':'');
+  const byCode = /^\d+$/.test(q);
+  const rows = byCode
+    ? STAFF.filter(s=>String(s.c).startsWith(q)).sort((a,b)=>(String(b.c)===q)-(String(a.c)===q)||a.c-b.c)
+    : STAFF.filter(s=>(dept==='All'||s.d===dept) && (jt==='All'||s.t===jt) && (!q || s.n.toLowerCase().includes(q) || s.t.toLowerCase().includes(q)));
+  const filtered = dept!=='All' || jt!=='All';
+  document.getElementById('meta').innerHTML = byCode
+    ? esc(`${rows.length} ${rows.length===1?'person':'people'} with code ${q}${filtered?' (searching all staff, filters ignored)':''}`)
+    : esc(`${rows.length} ${rows.length===1?'person':'people'}${jt!=='All'?' · '+jt:''}${dept!=='All'?' in '+label(dept):''}${q?` matching "${q}"`:''}`) + (jt!=='All'?'<button class="jt-clear" id="jtClear">Clear job filter</button>':'');
   const jc=document.getElementById('jtClear'); if(jc) jc.onclick=()=>{ jt='All'; titleOpts(); renderStaff(); };
   const shown = rows.slice(0,limit);
   document.getElementById('list').innerHTML = shown.length ? shown.map(s=>`
