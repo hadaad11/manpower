@@ -46,8 +46,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero p{margin-top:14px;color:rgba(255,255,255,.72);font-size:13px;max-width:520px}
 
 /* kpis */
-.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:-44px;padding:0 16px;position:relative;z-index:2}
-@media(min-width:720px){.kpis{grid-template-columns:repeat(4,1fr);gap:14px}}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:-44px;padding:0 16px;position:relative;z-index:2}
+@media(min-width:720px){.kpis{gap:14px}}
+@media(max-width:480px){.kpis .kpi{padding:12px 11px 11px}.kpis .kpi .k-label{font-size:10.5px;letter-spacing:.4px;white-space:nowrap}.kpis .kpi .k-ico{display:none}.kpis .kpi .k-val{font-size:26px;margin-top:4px}.kpis .kpi .k-sub{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.kpi.go{cursor:pointer;transition:transform .15s}
+.kpi.go:active{transform:scale(.97)}
 .kpi{background:var(--surface);border-radius:var(--radius);padding:14px 14px 12px;box-shadow:var(--shadow);border:1px solid var(--line)}
 .kpi .k-top{display:flex;align-items:center;justify-content:space-between}
 .kpi .k-label{font-size:11.5px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.6px}
@@ -307,15 +310,16 @@ const ico = {
   users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
   factory:'<path d="M2 20h20M4 20V10l6 4V10l6 4V4h4v16"/>',
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
+  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>'
 };
 const svg = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
 document.getElementById('kpis').innerHTML = [
   {l:'Total staff', v:STAFF.length, s:`${deptOrder.length} departments`, i:'users', c:'#1d4a85'},
   {l:'Production', v:prodTotal, s:`${Math.round(prodTotal/STAFF.length*100)}% of staff`, i:'factory', c:'#2563eb'},
-  {l:'Day workers', v:DAY.length, s:'Day shift', i:'sun', c:'#e8833a'},
-  {l:'Night workers', v:NIGHT.length, s:'Night shift', i:'moon', c:'#5b4bc4'}
-].map(k=>`<div class="kpi"><div class="k-top"><span class="k-label">${k.l}</span><span class="k-ico" style="background:${k.c}1a;color:${k.c}">${svg(ico[k.i])}</span></div><div class="k-val">${k.v}</div><div class="k-sub">${k.s}</div></div>`).join('');
+  {l:'Left', v:LEFT.length, s:`${LEFT.filter(s=>s.e.startsWith(String(new Date().getFullYear()))).length} in ${new Date().getFullYear()}`, i:'out', c:'#dc2626', go:'left'}
+].map(k=>`<div class="kpi${k.go?' go':''}"${k.go?` data-go="${k.go}" role="button" tabindex="0"`:''}><div class="k-top"><span class="k-label">${k.l}</span><span class="k-ico" style="background:${k.c}1a;color:${k.c}">${svg(ico[k.i])}</span></div><div class="k-val">${k.v}</div><div class="k-sub">${k.s}</div></div>`).join('');
+document.getElementById('kpis').addEventListener('click',e=>{ const k=e.target.closest('.kpi.go'); if(!k) return; show(k.dataset.go); window.scrollTo({top:document.querySelector('.nav').offsetTop,behavior:'smooth'}); });
 
 // Staff view
 let dept='All', q='', limit=60, jt='All';
