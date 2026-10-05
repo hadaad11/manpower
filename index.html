@@ -59,7 +59,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* nav */
 .nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);padding:14px 16px 10px;margin-top:6px}
 .seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px;box-shadow:var(--shadow)}
-.seg button{flex:1;padding:9px 8px;border-radius:9px;font-weight:600;font-size:13px;color:var(--ink-2);transition:all .18s}
+.seg button{flex:1;padding:9px 4px;border-radius:9px;font-weight:600;font-size:13px;color:var(--ink-2);transition:all .18s;white-space:nowrap}
+@media(max-width:400px){.seg button{font-size:12px}}
+.seg button .n{display:inline-block;margin-left:4px;font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:99px;background:#fee2e2;color:#b91c1c}
+.seg button.on .n{background:rgba(255,255,255,.2);color:#fff}
+.lstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:6px}
+.lstat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow)}
+.lstat b{display:block;font-size:22px;font-weight:800;letter-spacing:-.5px;color:#b91c1c;font-variant-numeric:tabular-nums}
+.lstat span{font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.5px}
+.mgrp{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin:16px 2px 2px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--ink-3)}
+.mgrp::after{content:"";flex:1;height:1px;background:var(--line)}
+.mgrp em{font-style:normal;background:var(--surface-2);border:1px solid var(--line);border-radius:99px;padding:1px 8px;color:var(--ink-2)}
 .seg button.on{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(15,39,72,.25)}
 @media (prefers-color-scheme: dark){.seg button.on{background:var(--brand-2)}}
 .search-row{display:flex;gap:8px;margin-top:10px}
@@ -184,6 +194,7 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-3);padding:8px 16px 28
     <button class="on" data-v="staff">Staff</button>
     <button data-v="depts">Departments</button>
     <button data-v="workers">Workers</button>
+    <button data-v="left">Left<span class="n" id="leftN"></span></button>
   </div>
   <div class="search-row">
   <div class="search">
@@ -218,6 +229,12 @@ footer{text-align:center;font-size:11.5px;color:var(--ink-3);padding:8px 16px 28
 
   <section class="view" id="v-workers">
     <div class="shifts" id="shifts"></div>
+  </section>
+
+  <section class="view" id="v-left">
+    <div class="lstats" id="leftStats"></div>
+    <div class="meta" id="leftMeta"></div>
+    <div class="list" id="leftList"></div>
   </section>
 </main>
 
@@ -352,6 +369,24 @@ function renderDepts(){
 document.getElementById('bars').addEventListener('click',e=>{const b=e.target.closest('.bar'); if(!b) return; dept=b.dataset.d; limit=60; show('staff'); chips(); titleOpts(); renderStaff(); window.scrollTo({top:document.querySelector('.nav').offsetTop,behavior:'smooth'});});
 
 // Workers view
+function renderLeft(){
+  const months = s=>{ const a=/^(\d{4})-(\d{2})/.exec(s.h), b=/^(\d{4})-(\d{2})/.exec(s.e); return a&&b ? (b[1]-a[1])*12+(b[2]-a[2]) : null; };
+  const yr = String(new Date().getFullYear());
+  const ten = LEFT.map(months).filter(m=>m!==null&&m>=0), avg = ten.length ? ten.reduce((x,y)=>x+y,0)/ten.length : 0;
+  document.getElementById('leftN').textContent = LEFT.length;
+  document.getElementById('leftStats').innerHTML =
+    `<div class="lstat"><b>${LEFT.length}</b><span>Total left</span></div>`+
+    `<div class="lstat"><b>${LEFT.filter(s=>s.e.startsWith(yr)).length}</b><span>In ${yr}</span></div>`+
+    `<div class="lstat"><b>${avg>=12?(avg/12).toFixed(1)+'y':Math.round(avg)+'m'}</b><span>Avg. stay</span></div>`;
+  const byPhone=/^0\d{3,}$/.test(q), byCode=!byPhone&&/^\d+$/.test(q);
+  const rows = LEFT.filter(s=>!q || (byPhone ? s.ph.includes(q) : byCode ? String(s.c).startsWith(q) : (s.n.toLowerCase().includes(q)||s.t.toLowerCase().includes(q))))
+    .sort((a,b)=>b.e.localeCompare(a.e)||a.c-b.c);
+  document.getElementById('leftMeta').textContent = `${rows.length} ${rows.length===1?'person':'people'} left the company${q?` matching "${q}"`:''}, newest first`;
+  let html='', cur='';
+  const grp={}; rows.forEach(s=>{const k=s.e.slice(0,7); grp[k]=(grp[k]||0)+1;});
+  rows.forEach(s=>{ const k=s.e.slice(0,7); if(k!==cur){ cur=k; const m=/^(\d{4})-(\d{2})$/.exec(k); html+=`<div class="mgrp">${m?MON[m[2]-1]+' '+m[1]:'No end date'} <em>${grp[k]}</em></div>`; } html+=card(s,true); });
+  document.getElementById('leftList').innerHTML = html || '<div class="empty">No one matches this search.</div>';
+}
 function renderWorkers(){
   const block=(name,sub,list,c,soft,icon)=>{
     const f=list.filter(w=>!q||w.n.toLowerCase().includes(q)||String(w.c).includes(q)||w.p.toLowerCase().includes(q));
@@ -369,10 +404,10 @@ function renderWorkers(){
 function show(v){ tselWrap.style.display = v==='staff'?'':'none'; document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v)); document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v)); }
 document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button'); if(b) show(b.dataset.v);});
 const qi=document.getElementById('q'), clr=document.getElementById('clr');
-qi.addEventListener('input',()=>{ q=qi.value.trim().toLowerCase(); clr.classList.toggle('show',!!q); limit=60; renderStaff(); renderWorkers(); if(q && document.getElementById('v-depts').classList.contains('on')) show('staff'); });
+qi.addEventListener('input',()=>{ q=qi.value.trim().toLowerCase(); clr.classList.toggle('show',!!q); limit=60; renderStaff(); renderWorkers(); renderLeft(); if(q && document.getElementById('v-depts').classList.contains('on')) show('staff'); });
 clr.addEventListener('click',()=>{ qi.value=''; qi.dispatchEvent(new Event('input')); qi.focus(); });
 
-chips(); titleOpts(); renderStaff(); renderDepts(); renderWorkers();
+chips(); titleOpts(); renderStaff(); renderDepts(); renderWorkers(); renderLeft();
 </script>
 </body>
 </html>
