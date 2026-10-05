@@ -384,12 +384,9 @@ function renderLeft(){
     `<div class="lstat"><b>${avg>=12?(avg/12).toFixed(1)+'y':Math.round(avg)+'m'}</b><span>Avg. stay</span></div>`;
   const byPhone=/^0\d{3,}$/.test(q), byCode=!byPhone&&/^\d+$/.test(q);
   const rows = LEFT.filter(s=>!q || (byPhone ? s.ph.includes(q) : byCode ? String(s.c).startsWith(q) : (s.n.toLowerCase().includes(q)||s.t.toLowerCase().includes(q))))
-    .sort((a,b)=>b.e.localeCompare(a.e)||a.c-b.c);
-  document.getElementById('leftMeta').textContent = `${rows.length} ${rows.length===1?'person':'people'} left the company${q?` matching "${q}"`:''}, newest first`;
-  let html='', cur='';
-  const grp={}; rows.forEach(s=>{const k=s.e.slice(0,7); grp[k]=(grp[k]||0)+1;});
-  rows.forEach(s=>{ const k=s.e.slice(0,7); if(k!==cur){ cur=k; const m=/^(\d{4})-(\d{2})$/.exec(k); html+=`<div class="mgrp">${m?MON[m[2]-1]+' '+m[1]:'No end date'} <em>${grp[k]}</em></div>`; } html+=card(s,true); });
-  document.getElementById('leftList').innerHTML = html || '<div class="empty">No one matches this search.</div>';
+    .sort((a,b)=>a.c-b.c);
+  document.getElementById('leftMeta').textContent = `${rows.length} ${rows.length===1?'person':'people'} left the company${q?` matching "${q}"`:''}, sorted by code`;
+  document.getElementById('leftList').innerHTML = rows.map(s=>card(s,true)).join('') || '<div class="empty">No one matches this search.</div>';
 }
 function renderWorkers(){
   const block=(name,sub,list,c,soft,icon)=>{
